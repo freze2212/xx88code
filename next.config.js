@@ -7,7 +7,8 @@ const nextConfig = {
     domains: ['localhost'],
   },
   env: {
-    CUSTOM_KEY: process.env.CUSTOM_KEY,
+    URL: process.env.URL,
+    GOOGLE_CAPCHAT: process.env.GOOGLE_CAPCHAT,
   },
 }
 
