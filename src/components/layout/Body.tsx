@@ -40,21 +40,25 @@ export function Body() {
 
     try {
       setLoading(true);
-      const res = await fetch(`${apiUrl}/redeem`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({
-          code: code.trim(),
-          account: account.trim(),
-          token: captchaToken,
-          'g-recaptcha-response': captchaToken,
-        }),
-      });
+      const res = await fetch(
+        `${apiUrl}/redeem`,
 
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            code: code.trim(),
+            account: account.trim(),
+            token: captchaToken,
+            'g-recaptcha-response': captchaToken,
+          }),
+        }
+      );
       const data = await res.json().catch(() => ({}));
+
       if (!res.ok) {
         setServerMsg(data?.error || 'Có lỗi xảy ra');
         recaptchaRef.current?.reset();
@@ -107,8 +111,8 @@ export function Body() {
               <div
                 className={`w-full max-w-[564px] rounded-2xl bg-white shadow-2xl transition-all duration-300 ${
                   hasError
-                    ? 'min-h-[520px] md:min-h-[560px]'
-                    : 'h-[420px] md:h-[480px]'
+                    ? 'min-h-[520px] md:min-h-[590px]'
+                    : 'h-[420px] md:h-[490px]'
                 }`}
               >
                 <div className="bg-[#00aeef] px-4 py-3 text-white sm:px-6 sm:py-4">
