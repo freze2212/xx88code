@@ -41,7 +41,7 @@ export function Body() {
     try {
       setLoading(true);
       const res = await fetch(
-        `${apiUrl}/code/use-code-public`,
+        `${apiUrl}/codes/use-code-public`,
         {
           method: 'POST',
           headers: {
