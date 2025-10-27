@@ -22,7 +22,7 @@ export function Body() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const siteKey = (process.env.GOOGLE_CAPCHAT as string) || '';
+  const siteKey = (process.env.GOOGLE_RECAPTCHA_SITE_KEY as string) || '';
   const apiUrl = (process.env.URL as string) || '';
 
   const handleSubmit = async (e: React.FormEvent) => {

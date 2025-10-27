@@ -8,7 +8,7 @@ const nextConfig = {
   },
   env: {
     URL: process.env.URL,
-    GOOGLE_CAPCHAT: process.env.GOOGLE_CAPCHAT,
+    GOOGLE_RECAPTCHA_SITE_KEY: process.env.GOOGLE_RECAPTCHA_SITE_KEY,
   },
 }
 
