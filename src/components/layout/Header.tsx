@@ -67,9 +67,6 @@ export function Header() {
 
           {/* Right side buttons - Full width/height */}
           <div className="flex items-center space-x-2 sm:space-x-4">
-            <button className="flex h-[32px] w-[100px] items-center justify-center rounded-3xl bg-[#00AEEF] font-bold text-white transition-opacity duration-200 hover:opacity-80 sm:h-[40px] sm:w-[130px]">
-              <span className="text-xs sm:text-sm">ĐĂNG NHẬP</span>
-            </button>
             <button className="cursor-pointer transition-opacity duration-200 hover:opacity-80">
               <Image
                 src="/images/calendar.png"
