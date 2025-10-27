@@ -18,12 +18,20 @@ export function Body() {
   const [loading, setLoading] = useState(false);
   const [serverMsg, setServerMsg] = useState<string | null>(null);
 
+  const [captchaKey, setCaptchaKey] = useState(0);
   const recaptchaRef = useRef<any>(null);
+
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
   const siteKey = (process.env.GOOGLE_RECAPTCHA_SITE_KEY as string) || '';
   const apiUrl = (process.env.URL as string) || '';
+
+  const resetCaptcha = (msg?: string) => {
+    setCaptchaKey((k) => k + 1);
+    setCaptchaToken(null);
+    if (msg) setCaptchaError(msg);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,41 +41,52 @@ export function Body() {
     setCaptchaError('');
     setServerMsg(null);
 
-    if (!code.trim()) setCodeError('Điền mã code nhận thưởng');
-    if (!account.trim()) setAccountError('Nhập tên tài khoản');
-    if (!captchaToken) setCaptchaError('Vui lòng xác minh Captcha');
-    if (!code.trim() || !account.trim() || !captchaToken) return;
+    let hasLocalError = false;
+    if (!code.trim()) {
+      setCodeError('Điền mã code nhận thưởng');
+      hasLocalError = true;
+    }
+    if (!account.trim()) {
+      setAccountError('Nhập tên tài khoản');
+      hasLocalError = true;
+    }
+    if (!captchaToken) {
+      setCaptchaError('Vui lòng xác minh Captcha');
+      hasLocalError = true;
+    }
+
+    if (hasLocalError) {
+      if (captchaToken) resetCaptcha('Vui lòng xác minh Captcha lại');
+      return;
+    }
 
     try {
       setLoading(true);
-      const res = await fetch(
-        `${apiUrl}/codes/use-code-public`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify({
-            username: account.trim(),
-            code: code.trim(),
-            captchaToken: captchaToken,
-          }),
-        }
-      );
+      const res = await fetch(`${apiUrl}/codes/use-code-public`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          username: account.trim(),
+          code: code.trim(),
+          captchaToken: captchaToken,
+        }),
+      });
+
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        setServerMsg(data?.error || 'Có lỗi xảy ra');
-        recaptchaRef.current?.reset();
-        setCaptchaToken(null);
-      } else {
-        setServerMsg(data?.message || 'Xác nhận thành công!');
+        setServerMsg(data?.message || data?.error || 'Có lỗi xảy ra');
+        resetCaptcha('Vui lòng xác minh Captcha lại');
+        return;
       }
+
+      setServerMsg(data?.message || 'Xác nhận thành công!');
     } catch {
       setServerMsg('Không thể kết nối máy chủ');
-      recaptchaRef.current?.reset();
-      setCaptchaToken(null);
+      resetCaptcha('Vui lòng xác minh Captcha lại');
     } finally {
       setLoading(false);
     }
@@ -105,12 +124,11 @@ export function Body() {
           <div className="grid grid-cols-1 items-center lg:grid-cols-2">
             {/* Left */}
             <div className="flex justify-center text-center lg:-mt-48 lg:text-left">
-              {/* Bỏ overflow-hidden để popup captcha không bị cắt */}
               <div
                 className={`w-full max-w-[564px] rounded-2xl bg-white shadow-2xl transition-all duration-300 ${
                   hasError
-                    ? 'min-h-[520px] md:min-h-[590px]'
-                    : 'h-[420px] md:h-[490px]'
+                    ? 'min-h-[468px] md:min-h-[507px]'
+                    : 'h-[420px] md:h-[507px]'
                 }`}
               >
                 <div className="bg-[#00aeef] px-4 py-3 text-white sm:px-6 sm:py-4">
@@ -185,7 +203,7 @@ export function Body() {
                     </div>
 
                     {/* Account */}
-                    <div className="space-y-1">
+                    <div className="!mt-[8px]">
                       <div className="relative">
                         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                           <Image
@@ -216,54 +234,41 @@ export function Body() {
                       )}
                     </div>
 
-                    <div
-                      className="
-    relative z-[2147483647] h-[78px] w-full overflow-visible max-[344px]:h-[70px] max-[320px]:h-[62px]
-  "
-                    >
+                    {/* reCAPTCHA */}
+                    <div className="relative z-[2147483647] !mt-[10px] h-[78px] w-full overflow-visible max-[344px]:h-[70px] max-[320px]:h-[62px]">
                       {mounted && siteKey && (
                         <div
-                          className="
-        origin-top-left scale-100 max-[344px]:scale-[0.9] max-[320px]:scale-[0.8]
-      "
-                          style={{
-                            width: 304,
-                            height: 78,
-                          }}
+                          className="origin-top-left scale-100 max-[344px]:scale-[0.9] max-[320px]:scale-[0.8]"
+                          style={{ width: 304, height: 78 }}
                         >
                           <ReCAPTCHA
+                            key={captchaKey}
                             ref={recaptchaRef}
                             sitekey={siteKey}
                             onChange={(token: string | null) => {
                               setCaptchaToken(token);
                               setCaptchaError('');
                             }}
-                            onExpired={() => {
-                              setCaptchaToken(null);
-                              setCaptchaError('Captcha đã hết hạn');
-                            }}
+                            onExpired={() => resetCaptcha('Captcha đã hết hạn')}
                             onErrored={() =>
-                              setCaptchaError('Không tải được Captcha')
+                              resetCaptcha('Không tải được Captcha')
                             }
                           />
                         </div>
                       )}
 
                       {captchaError && (
-                        <p className="mt-2 text-sm text-red-500">
+                        <p className="mt-0 text-sm text-red-500">
                           {captchaError}
                         </p>
                       )}
                     </div>
 
                     {/* Submit */}
-
                     <button
                       type="submit"
                       disabled={loading}
-                      className=" w-full rounded-full bg-[#00AEEF] py-[5px] text-base font-bold text-white
-             transition-opacity duration-200 hover:opacity-90 disabled:opacity-60
-             sm:py-4 sm:text-lg"
+                      className="!mt-[27px] w-full rounded-full bg-[#00AEEF] py-[5px] text-base font-bold text-white transition-opacity duration-200 hover:opacity-90 disabled:opacity-60 sm:py-4 sm:text-lg"
                     >
                       {loading ? 'ĐANG KIỂM TRA…' : 'KIỂM TRA NGAY'}
                     </button>
