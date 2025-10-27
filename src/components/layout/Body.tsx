@@ -41,8 +41,7 @@ export function Body() {
     try {
       setLoading(true);
       const res = await fetch(
-        `${apiUrl}/redeem`,
-
+        `${apiUrl}/code/use-code-public`,
         {
           method: 'POST',
           headers: {
@@ -50,10 +49,9 @@ export function Body() {
             Accept: 'application/json',
           },
           body: JSON.stringify({
+            username: account.trim(),
             code: code.trim(),
-            account: account.trim(),
-            token: captchaToken,
-            'g-recaptcha-response': captchaToken,
+            captchaToken: captchaToken,
           }),
         }
       );
