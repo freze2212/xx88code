@@ -24,7 +24,7 @@ export function Sidebar() {
       name: 'Trang Chủ',
       icon: '/images/home.png',
       bgColor: 'bg-blue-400',
-      linkTo: 'https://5333.com/',
+      linkTo: 'https://53333.com/',
     },
   ];
 
