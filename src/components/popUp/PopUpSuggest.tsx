@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import Image from 'next/image';
 
 type Props = {
   open: boolean;
@@ -37,25 +38,46 @@ export default function PopUpSuggest({
       aria-label={title}
     >
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative z-10 w-[92%] max-w-md rounded-2xl bg-white p-5 shadow-2xl">
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-lg font-bold">{title}</h3>
-          <button
-            onClick={onClose}
-            className="rounded-full px-2 py-1 text-sm font-semibold text-gray-600 hover:bg-gray-100"
-            aria-label="Đóng"
-          >
-            ✕
-          </button>
-        </div>
-        <div className="text-gray-800">{children}</div>
-        <div className="mt-4 text-right">
-          <button
-            onClick={onClose}
-            className="rounded-full bg-[#00AEEF] px-4 py-2 font-bold text-white hover:opacity-90"
-          >
-            OK
-          </button>
+
+      {/* Card nền ảnh */}
+      <div className="relative z-10 w-[92%] max-w-[399px] overflow-hidden rounded-2xl shadow-2xl">
+        {/* Giữ đúng tỉ lệ ảnh (4:3) */}
+        <div className="relative w-full pt-[75%]">
+          {/* nền ảnh hiển thị full, không cắt */}
+          <Image
+            src="/images/popupSuggest.png"
+            alt=""
+            fill
+            sizes="(max-width: 768px) 92vw, 399px"
+            className="pointer-events-none select-none object-contain"
+            priority
+          />
+
+          {/* Nội dung phủ lên ảnh: căn giữa, text-center */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-5 text-center">
+            <div className="w-full">
+              {' '}
+              <span className="text-[#00AEEF]">{children}</span>
+            </div>
+
+            {/* Nút xác nhận */}
+            <button
+              type="button"
+              onClick={onClose}
+              className="absolute bottom-[21px] mt-5 inline-flex items-center justify-center rounded-md outline-none focus-visible:ring focus-visible:ring-[#00AEEF]"
+              aria-label="Xác nhận"
+            >
+              <Image
+                src="/images/btnXacNhan.png"
+                alt="Xác nhận"
+                width={220}
+                height={56}
+                className="h-auto w-[150px] transition hover:scale-95 hover:brightness-110 active:scale-95 md:w-[200px]"
+                priority
+              />
+              <span className="sr-only">Xác nhận</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>,
