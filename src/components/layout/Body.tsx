@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Turnstile } from '@marsidev/react-turnstile';
 import PopUpSuggest from '../popUp/PopUpSuggest';
+import SnowEffect from '../ui/SnowEffect';
 
 export function Body() {
   const [code, setCode] = useState('');
@@ -102,7 +103,9 @@ export function Body() {
   const hasError = !!(codeError || accountError || captchaError || serverMsg);
 
   return (
-    <div className="relative min-h-screen w-full">
+    <>
+      <SnowEffect />
+      <div className="relative min-h-screen w-full">
       <div
         className="absolute inset-0 bg-cover bg-center md:hidden"
         style={{ backgroundImage: 'url(/images/bg-mb.webp)' }}
@@ -276,6 +279,7 @@ export function Body() {
           <p className="text-center">{popupMsg}</p>
         </PopUpSuggest>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
