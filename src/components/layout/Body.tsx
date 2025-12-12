@@ -111,8 +111,21 @@ export function Body() {
         className="hidden md:block absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: 'url(/images/bg-pc.webp)' }}
       />
+      {/* Santa decorations for mobile only */}
+      <div className="absolute inset-0 z-[5] md:hidden pointer-events-none">
+        <img
+          src="/images/santa-left.webp"
+          alt="Santa Left"
+          className="absolute left-0 top-0 w-[140px] h-[179px]"
+        />
+        <img
+          src="/images/santa-right.webp"
+          alt="Santa Right"
+          className="absolute right-0 top-0 w-[140px] h-[179px]"
+        />
+      </div>
       <div className="relative z-10 flex min-h-screen items-start justify-center px-2 pt-24">
-        <div className="relative w-[394px] h-[450px] md:w-[828px] md:h-[768px]">
+        <div className="relative z-20 w-[394px] h-[450px] md:w-[828px] md:h-[768px]">
           <img
             src="/images/modal-code-mb.webp"
             alt="Modal Background Mobile"
