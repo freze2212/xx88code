@@ -265,7 +265,7 @@ export function Body() {
               </div>
 
               {!popupOpen && serverMsg && (
-                <p className="text-center text-base md:text-xl text-white mt-4">{serverMsg}</p>
+                <p className="text-center text-base md:text-xl text-white mt-0 md:mt-4">{serverMsg}</p>
               )}
             </form>
           </div>
