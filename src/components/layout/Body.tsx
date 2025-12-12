@@ -1,6 +1,6 @@
-'use client';
+﻿'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Turnstile } from '@marsidev/react-turnstile';
 import PopUpSuggest from '../popUp/PopUpSuggest';
@@ -88,7 +88,7 @@ export function Body() {
 
       setServerMsg(reSultPointer);
 
-      // ⬇️ mở popup và truyền nội dung
+      //  mở popup và truyền nội dung
       setPopupMsg(reSultPointer);
       setPopupOpen(true);
     } catch {
@@ -102,226 +102,167 @@ export function Body() {
   const hasError = !!(codeError || accountError || captchaError || serverMsg);
 
   return (
-    <div className="relative min-h-screen">
-      {/* Background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 hidden md:block">
-          <Image
-            src="/images/bg-pc-xx88.webp"
-            alt="Desktop Background"
-            fill
-            sizes="100vw"
-            className="object-cover"
-            priority
+    <div className="relative min-h-screen w-full">
+      <div
+        className="absolute inset-0 bg-cover bg-center md:hidden"
+        style={{ backgroundImage: 'url(/images/bg-mb.webp)' }}
+      />
+      <div
+        className="hidden md:block absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: 'url(/images/bg-pc.webp)' }}
+      />
+      <div className="relative z-10 flex min-h-screen items-start justify-center px-2 pt-24">
+        <div className="relative w-[394px] h-[450px] md:w-[828px] md:h-[768px]">
+          <img
+            src="/images/modal-code-mb.webp"
+            alt="Modal Background Mobile"
+            className="block w-full h-full object-cover md:hidden"
           />
-        </div>
-        <div className="absolute inset-0 md:hidden">
-          <Image
-            src="/images/bg-mb-xx88.png"
-            alt="Mobile Background"
-            fill
-            sizes="100vw"
-            className="object-cover"
-            priority
+          <img
+            src="/images/modal-code.webp"
+            alt="Modal Background"
+            className="hidden w-full h-full object-cover md:block"
           />
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10 flex min-h-screen items-center justify-center">
-        <div className="mx-auto w-[90%] py-1 lg:py-12">
-          <div className="grid grid-cols-1 items-center lg:grid-cols-2">
-            {/* Left */}
-            <div className="flex justify-center text-center lg:-mt-48 lg:text-left">
-              <div
-                className={`w-full max-w-[564px] rounded-2xl bg-white shadow-2xl transition-all duration-300 ${
-                  hasError
-                    ? 'min-h-[468px] md:min-h-[507px]'
-                    : 'h-[420px] md:h-[507px]'
-                }`}
-              >
-                <div className="bg-[#00aeef] px-4 py-3 text-white sm:px-6 sm:py-4">
-                  <h2
-                    className="text-center text-lg font-bold tracking-wide sm:text-xl"
-                    style={{ wordSpacing: '0.1em' }}
-                  >
-                    NHẬP CODE KHUYẾN MÃI
-                  </h2>
-                </div>
-
-                <div className="p-4 sm:p-6">
-                  {/* Branding */}
-                  <div className="mb-4 flex items-center justify-between sm:mb-6">
-                    <div className="text-left">
-                      <h3 className="mb-1 text-xl font-bold text-black sm:text-2xl">
-                        Juventus FC &amp; KJC
-                      </h3>
-                      <p className="mb-1 text-xs text-gray-600 sm:text-sm">
-                        Đối Tác Chính Thức
-                      </p>
-                      <p className="text-xs text-gray-600 sm:text-sm">
-                        Năm 2025-2026
-                      </p>
-                    </div>
-                    <div className="flex items-center">
-                      <Image
-                        src="/images/juve-kjc.png"
-                        alt="Juventus & KJC"
-                        width={230}
-                        height={81}
-                      />
-                    </div>
+          <div className="absolute inset-0 flex items-center justify-center p-5 sm:p-6 ">
+            <form
+              onSubmit={handleSubmit}
+              className="w-full max-w-[85%] md:max-w-[60%] pt-[86px]"
+              noValidate
+            >
+              {/* Code */}
+              <div className="space-y-1 mb-4 md:mb-5">
+                <div className="relative">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2 md:pl-3">
+                    <Image
+                      src="/images/icons/code-icon.png"
+                      alt="Ticket Icon"
+                      width={32}
+                      height={32}
+                      className="h-5 w-5 md:h-7 md:w-7 text-gray-400"
+                    />
                   </div>
-
-                  {/* Form */}
-                  <form
-                    onSubmit={handleSubmit}
-                    className="space-y-3 sm:space-y-4"
-                    noValidate
-                  >
-                    {/* Code */}
-                    <div className="space-y-1">
-                      <div className="relative">
-                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                          <Image
-                            src="/images/icons/code-icon.png"
-                            alt="Ticket Icon"
-                            width={28}
-                            height={28}
-                            className="h-6 w-6 text-gray-400"
-                          />
-                        </div>
-                        <input
-                          type="text"
-                          value={code}
-                          onChange={(e) => {
-                            setCode(e.target.value);
-                            setCodeError('');
-                          }}
-                          placeholder="Mã code"
-                          className={`w-full rounded-lg py-2 pl-12 pr-3 text-base focus:border focus:border-[#00AEEE] focus:outline-none sm:py-3 sm:text-lg ${
-                            codeError ? 'border border-red-500' : 'border-0'
-                          }`}
-                          style={{ backgroundColor: 'rgba(241, 241, 241, 1)' }}
-                          autoComplete="one-time-code"
-                        />
-                      </div>
-                      {codeError && (
-                        <p className="text-sm text-red-500">{codeError}</p>
-                      )}
-                    </div>
-
-                    {/* Account */}
-                    <div className="!mt-[8px]">
-                      <div className="relative">
-                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                          <Image
-                            src="/images/icons/user-icon-xx88.png"
-                            alt="User Icon"
-                            width={28}
-                            height={28}
-                            className="h-6 w-6 text-gray-400"
-                          />
-                        </div>
-                        <input
-                          type="text"
-                          value={account}
-                          onChange={(e) => {
-                            setAccount(e.target.value);
-                            setAccountError('');
-                          }}
-                          placeholder="Nhập tài khoản"
-                          className={`w-full rounded-lg py-2 pl-12 pr-3 text-base focus:border focus:border-[#00AEEE] focus:outline-none sm:py-3 sm:text-lg ${
-                            accountError ? 'border border-red-500' : 'border-0'
-                          }`}
-                          style={{ backgroundColor: 'rgba(241, 241, 241, 1)' }}
-                          autoComplete="username"
-                        />
-                      </div>
-                      {accountError && (
-                        <p className="text-sm text-red-500">{accountError}</p>
-                      )}
-                    </div>
-
-                    <div className="relative z-[2147483647] !mt-[10px] h-[78px] w-full overflow-visible max-[344px]:h-[70px] max-[320px]:h-[62px]">
-                      {mounted && siteKey && (
-                        <div
-                          className="origin-top-left scale-100 max-[344px]:scale-[0.9] max-[320px]:scale-[0.8]"
-                          style={{ width: 304, height: 78 }}
-                        >
-                          <Turnstile
-                            key={captchaKey}
-                            siteKey={siteKey}
-                            onSuccess={(token: string) => {
-                              setCaptchaToken(token);
-                              setCaptchaError('');
-                            }}
-                            onExpire={() => resetCaptcha('Captcha đã hết hạn')}
-                            onError={() => {
-                              // không reset ngay để tránh vòng lặp remount
-                              setCaptchaError('Không tải được Captcha');
-                            }}
-                            options={{ size: 'normal' }}
-                          />
-                        </div>
-                      )}
-
-                      {captchaError && (
-                        <p className="mt-0 text-sm text-red-500">
-                          {captchaError}{' '}
-                          <button
-                            type="button"
-                            className="underline"
-                            onClick={() => resetCaptcha()}
-                          >
-                            Thử lại
-                          </button>
-                        </p>
-                      )}
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="!mt-[27px] w-full rounded-full bg-[#00AEEF] py-[5px] text-base font-bold text-white transition-opacity duration-200 hover:opacity-90 disabled:opacity-60 sm:py-4 sm:text-lg"
-                    >
-                      {loading ? 'ĐANG KIỂM TRA…' : 'KIỂM TRA NGAY'}
-                    </button>
-
-                    {!popupOpen && serverMsg && (
-                      <p className=" text-red mt-2 text-center text-sm">
-                        {serverMsg}
-                      </p>
-                    )}
-                  </form>
+                  <input
+                    type="text"
+                    value={code}
+                    onChange={(e) => {
+                      setCode(e.target.value);
+                      setCodeError('');
+                    }}
+                    placeholder="Mã code"
+            className={`w-full rounded-lg py-2.5 md:py-4 pl-10 md:pl-14 pr-3 text-base md:text-lg focus:border focus:border-[#00AEEE] focus:outline-none sm:text-xl ${
+                      codeError
+                        ? 'border border-red-500'
+                        : 'border border-gray-200'
+                    }`}
+                    style={{ backgroundColor: 'rgba(241, 241, 241, 1)' }}
+                    autoComplete="one-time-code"
+                  />
                 </div>
+                {codeError && (
+                  <p className="text-sm md:text-base text-white">{codeError}</p>
+                )}
               </div>
-            </div>
 
-            {/* Right */}
-            <div className="flex justify-center lg:justify-center">
-              <div className="relative flex w-full justify-center">
-                <Image
-                  src="/images/banner.png"
-                  alt="XX88 Banner"
-                  width={852}
-                  height={698}
-                  className="h-auto w-full max-w-[852px]"
-                  priority
-                />
+              {/* Account */}
+              <div className="space-y-1 mb-4 md:mb-5">
+                <div className="relative">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2 md:pl-3">
+                    <Image
+                      src="/images/icons/user-icon-xx88.png"
+                      alt="User Icon"
+              width={32}
+              height={32}
+              className="h-5 w-5 md:h-7 md:w-7 text-gray-400"
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    value={account}
+                    onChange={(e) => {
+                      setAccount(e.target.value);
+                      setAccountError('');
+                    }}
+                    placeholder="Nhập tài khoản"
+            className={`w-full rounded-lg py-2.5 md:py-4 pl-10 md:pl-14 pr-3 text-base md:text-lg focus:border focus:border-[#00AEEE] focus:outline-none sm:text-xl ${
+                      accountError
+                        ? 'border border-red-500'
+                        : 'border border-gray-200'
+                    }`}
+                    style={{ backgroundColor: 'rgba(241, 241, 241, 1)' }}
+                    autoComplete="username"
+                  />
+                </div>
+                {accountError && (
+                  <p className="text-sm md:text-base text-white">{accountError}</p>
+                )}
               </div>
-            </div>
+
+              <div className={`relative z-[2147483647] h-[70px] md:h-[78px] w-full overflow-visible ${captchaError ? 'mb-4 md:mb-5' : 'mb-0 md:mb-5'}`}>
+                {mounted && siteKey && (
+                  <div
+                    className="origin-top-left scale-[0.75] md:scale-100"
+                    style={{ width: 304, height: 78 }}
+                  >
+                    <Turnstile
+                      key={captchaKey}
+                      siteKey={siteKey}
+                      onSuccess={(token: string) => {
+                        setCaptchaToken(token);
+                        setCaptchaError('');
+                      }}
+                      onExpire={() => resetCaptcha('Captcha đã hết hạn')}
+                      onError={() => {
+                        // không reset ngay để tránh vòng lặp remount
+                        setCaptchaError('Không tải được Captcha');
+                      }}
+                      options={{ size: 'normal' }}
+                    />
+                  </div>
+                )}
+
+                {captchaError && (
+                  <p className="-mt-4 md:mt-0 text-sm md:text-base text-white">
+                    {captchaError}{' '}
+                    <button
+                      type="button"
+                      className="underline text-red-500"
+                      onClick={() => resetCaptcha()}
+                    >
+                      Thử lại
+                    </button>
+                  </p>
+                )}
+              </div>
+
+              <div className={`flex justify-center ${captchaError ? '' : '-mt-[10px] md:mt-0'}`}>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex items-center justify-center bg-cover bg-center text-white text-sm md:text-2xl font-bold transition-opacity duration-200 hover:opacity-90 disabled:opacity-60 pt-4 w-[240px] h-[55px] md:w-[456px] md:h-[86px]"
+                  style={{
+                    backgroundImage: 'url(/images/btn-check.webp)',
+                  }}
+                  aria-label="Kiểm tra ngay"
+                >
+                  KIỂM TRA NGAY
+                </button>
+              </div>
+
+              {!popupOpen && serverMsg && (
+                <p className="text-center text-base text-white">{serverMsg}</p>
+              )}
+            </form>
           </div>
         </div>
-      </div>
 
-      <PopUpSuggest
-        open={popupOpen}
-        onClose={() => setPopupOpen(false)}
-        title="Thông báo"
-      >
-        <p className="text-center">{popupMsg}</p>
-      </PopUpSuggest>
+        <PopUpSuggest
+          open={popupOpen}
+          onClose={() => setPopupOpen(false)}
+          title="Thông báo"
+        >
+          <p className="text-center">{popupMsg}</p>
+        </PopUpSuggest>
+      </div>
     </div>
   );
 }
