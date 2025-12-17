@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import Image from 'next/image';
 
 type Props = {
   open: boolean;
   onClose: () => void;
   title?: string;
   autoCloseMs?: number;
+  // 'success' = dấu tích, 'error' = dấu chấm than
+  variant?: 'success' | 'error';
   children?: React.ReactNode;
 };
 
@@ -17,6 +18,7 @@ export default function PopUpSuggest({
   onClose,
   title = 'Thông báo',
   autoCloseMs,
+  variant = 'success',
   children,
 }: Props) {
   const [mounted, setMounted] = useState(false);
@@ -30,6 +32,8 @@ export default function PopUpSuggest({
 
   if (!mounted || !open) return null;
 
+  const isError = variant === 'error';
+
   return createPortal(
     <div
       className="fixed inset-0 z-[2147483647] flex items-center justify-center"
@@ -39,45 +43,45 @@ export default function PopUpSuggest({
     >
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
 
-      {/* Card nền ảnh */}
-      <div className="relative z-10 w-[92%] max-w-[399px] overflow-hidden rounded-2xl shadow-2xl">
-        {/* Giữ đúng tỉ lệ ảnh (4:3) */}
-        <div className="relative w-full pt-[75%]">
-          {/* nền ảnh hiển thị full, không cắt */}
-          <Image
-            src="/images/popupSuggest.png"
-            alt=""
-            fill
-            sizes="(max-width: 768px) 92vw, 399px"
-            className="pointer-events-none select-none object-contain"
-            priority
-          />
-
-          {/* Nội dung phủ lên ảnh: căn giữa, text-center */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-5 text-center">
-            <div className="w-full">
-              {' '}
-              <span className="text-[#00AEEF]">{children}</span>
-            </div>
-
-            {/* Nút xác nhận */}
-            <button
-              type="button"
-              onClick={onClose}
-              className="absolute bottom-[21px] mt-5 inline-flex items-center justify-center rounded-md outline-none focus-visible:ring focus-visible:ring-[#00AEEF]"
-              aria-label="Xác nhận"
+      {/* Card */}
+      <div className="relative z-10 w-[92%] max-w-[380px] border-[10px] border-solid border-[#02ABED] rounded-[32px] bg-gradient-to-b from-[#E6F6FF] to-[#FFFFFF] p-[3px] shadow-2xl">
+        <div className="rounded-[28px] gap-3 bg-white px-6 pt-4 pb-3 md:px-8 md:pt-7 md:pb-8 flex flex-col items-center text-center">
+          {/* Icon trạng thái (✓ hoặc !) */}
+          <div className="mb-4 flex justify-center">
+            <div
+              className={`flex h-20 w-20 items-center justify-center rounded-full ${
+                isError ? 'bg-red-500' : 'bg-[#00AEEF]'
+              }`}
             >
-              <Image
-                src="/images/btnXacNhan.png"
-                alt="Xác nhận"
-                width={220}
-                height={56}
-                className="h-auto w-[150px] transition hover:scale-95 hover:brightness-110 active:scale-95 md:w-[200px]"
-                priority
-              />
-              <span className="sr-only">Xác nhận</span>
-            </button>
+              <span className="text-5xl font-bold text-white leading-none">
+                {isError ? '!' : '✓'}
+              </span>
+            </div>
           </div>
+
+          {/* Nội dung */}
+          <div className="mb-6 px-1">
+            <p
+              className={`text-sm md:text-base font-semibold leading-relaxed ${
+                isError ? 'text-red-500' : 'text-green-500'
+              }`}
+            >
+              {children}
+            </p>
+          </div>
+
+          {/* Nút xác nhận */}
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex min-w-[180px] items-center justify-center rounded-full px-8 py-2.5 text-sm md:text-base font-bold uppercase tracking-wide text-white shadow-md transition hover:brightness-110 active:scale-95"
+            style={{
+              background: 'radial-gradient(circle at 50% 50%, #33C6FA 0%, #02abed 70%)'
+            }}
+            aria-label="Xác nhận"
+          >
+            Xác nhận
+          </button>
         </div>
       </div>
     </div>,
