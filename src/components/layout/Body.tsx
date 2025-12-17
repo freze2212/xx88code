@@ -23,6 +23,9 @@ export function Body() {
 
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupMsg, setPopupMsg] = useState<string | null>(null);
+  const [popupVariant, setPopupVariant] = useState<'success' | 'error'>(
+    'success'
+  );
 
   const siteKey =
     (process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY as string) || '';
@@ -78,19 +81,21 @@ export function Body() {
 
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setServerMsg(data?.message || data?.error || 'Có lỗi xảy ra');
+        const apiError = data?.message || data?.error || 'Có lỗi xảy ra';
+        setServerMsg(apiError);
+        setPopupMsg(apiError);
+        setPopupVariant('error');
+        setPopupOpen(true);
         resetCaptcha('Vui lòng xác minh Captcha lại');
         return;
       }
 
-      const reSultPointer = data?.message
-        ? `${data.data?.message || data.message} `
-        : data?.data?.message || 'Xác nhận thành công!';
+      const points = data?.data?.pointsAdded || 0;
+      const successMessage = `Đã sử dụng code thành công! Đã cộng ${points} điểm`;
 
-      setServerMsg(reSultPointer);
-
-      //  mở popup và truyền nội dung
-      setPopupMsg(reSultPointer);
+      setServerMsg(successMessage);
+      setPopupMsg(successMessage);
+      setPopupVariant('success');
       setPopupOpen(true);
     } catch {
       setServerMsg('Không thể kết nối máy chủ');
@@ -127,8 +132,8 @@ export function Body() {
           className="absolute right-0 top-0 w-[140px] h-[179px]"
         />
       </div>
-      <div className="relative z-10 flex min-h-screen items-start justify-center px-2 pt-24">
-        <div className="relative z-20 w-[394px] h-[450px] md:w-[828px] md:h-[768px]">
+      <div className="relative z-10 flex flex-col min-h-screen items-center justify-start px-2 md:pt-4 pt-24">
+        <div className="relative z-20 w-[394px] h-[450px] md:w-[828px] md:h-[668px]">
           <img
             src="/images/modal-code-mb.webp"
             alt="Modal Background Mobile"
@@ -142,7 +147,7 @@ export function Body() {
           <div className="absolute inset-0 flex items-center justify-center p-5 sm:p-6 ">
             <form
               onSubmit={handleSubmit}
-              className="w-full max-w-[85%] md:max-w-[60%] pt-[86px]"
+              className="w-full max-w-[85%] md:max-w-[60%] pt-[60px] md:pt-[140px]"
               noValidate
             >
               {/* Code */}
@@ -263,18 +268,24 @@ export function Body() {
                   KIỂM TRA NGAY
                 </button>
               </div>
-
-              {!popupOpen && serverMsg && (
-                <p className="text-center text-base md:text-xl text-white mt-0 md:mt-4">{serverMsg}</p>
-              )}
             </form>
           </div>
+        </div>
+
+        {/* GIF below modal */}
+        <div className="relative z-20 mt-4 md:mt-6 flex justify-center">
+          <img
+            src="/images/xx88-gif.gif"
+            alt="XX88 GIF"
+            className="max-w-full h-auto scale-[1.3] md:scale-110 md:mr-4"
+          />
         </div>
 
         <PopUpSuggest
           open={popupOpen}
           onClose={() => setPopupOpen(false)}
           title="Thông báo"
+          variant={popupVariant}
         >
           <p className="text-center">{popupMsg}</p>
         </PopUpSuggest>
