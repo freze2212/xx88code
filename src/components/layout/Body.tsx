@@ -73,7 +73,7 @@ export function Body() {
           Accept: 'application/json',
         },
         body: JSON.stringify({
-          username: account.trim(),
+          username: account.trim().toLowerCase(),
           code: code.trim(),
           captchaToken: captchaToken,
         }),
