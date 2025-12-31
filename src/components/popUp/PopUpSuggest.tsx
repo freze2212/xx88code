@@ -44,8 +44,8 @@ export default function PopUpSuggest({
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
 
       {/* Card */}
-      <div className="relative z-10 w-[92%] max-w-[380px] border-[10px] border-solid border-[#02ABED] rounded-[32px] bg-gradient-to-b from-[#E6F6FF] to-[#FFFFFF] p-[3px] shadow-2xl">
-        <div className="rounded-[28px] gap-3 bg-white px-6 pt-4 pb-3 md:px-8 md:pt-7 md:pb-8 flex flex-col items-center text-center">
+      <div className="relative z-10 w-[92%] max-w-[380px] rounded-[32px] border-[10px] border-solid border-[#02ABED] bg-gradient-to-b from-[#E6F6FF] to-[#FFFFFF] p-[3px] shadow-2xl">
+        <div className="flex flex-col items-center gap-3 rounded-[28px] bg-white px-6 pb-3 pt-4 text-center md:px-8 md:pb-8 md:pt-7">
           {/* Icon trạng thái (✓ hoặc !) */}
           <div className="mb-4 flex justify-center">
             <div
@@ -53,7 +53,7 @@ export default function PopUpSuggest({
                 isError ? 'bg-red-500' : 'bg-[#00AEEF]'
               }`}
             >
-              <span className="text-5xl font-bold text-white leading-none">
+              <span className="text-5xl font-bold leading-none text-white">
                 {isError ? '!' : '✓'}
               </span>
             </div>
@@ -62,7 +62,7 @@ export default function PopUpSuggest({
           {/* Nội dung */}
           <div className="mb-6 px-1">
             <p
-              className={`text-sm md:text-base font-semibold leading-relaxed ${
+              className={`text-sm font-semibold leading-relaxed md:text-base ${
                 isError ? 'text-red-500' : 'text-green-500'
               }`}
             >
@@ -74,9 +74,10 @@ export default function PopUpSuggest({
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex min-w-[180px] items-center justify-center rounded-full px-8 py-2.5 text-sm md:text-base font-bold uppercase tracking-wide text-white shadow-md transition hover:brightness-110 active:scale-95"
+            className="inline-flex min-w-[180px] items-center justify-center rounded-full px-8 py-2.5 text-sm font-bold uppercase tracking-wide text-white shadow-md transition hover:brightness-110 active:scale-95 md:text-base"
             style={{
-              background: 'radial-gradient(circle at 50% 50%, #33C6FA 0%, #02abed 70%)'
+              background:
+                'radial-gradient(circle at 50% 50%, #33C6FA 0%, #02abed 70%)',
             }}
             aria-label="Xác nhận"
           >
