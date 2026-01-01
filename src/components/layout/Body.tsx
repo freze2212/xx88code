@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Turnstile } from '@marsidev/react-turnstile';
 import PopUpSuggest from '../popUp/PopUpSuggest';
 import Link from 'next/link';
+import PopUpSuggestTet from '../popUp/PopUpSuggestTet';
 // import SnowEffect from '../ui/SnowEffect';
 
 export function Body() {
@@ -112,27 +113,46 @@ export function Body() {
     <>
       {/* <SnowEffect /> */}
       {/*  */}
-      <div className="relative">
-        {/* <div
-          className="absolute inset-0 bg-cover bg-center md:hidden"
-          style={{ backgroundImage: 'url(/images/bg-new.png)' }}
+      <div className="md:h-min-screen relative w-full">
+        {/* HEADER START */}
+        <div className="mb-10px relative z-40 pt-[14px] md:flex md:flex-col md:items-center md:justify-center lg:pt-[42px]">
+          <div className="flex justify-center">
+            <Link
+              href="https://pc-xx88-link.rr88tino.workers.dev/"
+              className="btn-hover mb-3 lg:absolute lg:right-[30px] lg:top-[42px]"
+            >
+              <Image
+                src="/images/btn-home.png"
+                alt="Trang Chủ"
+                width={201}
+                height={41}
+                className="rounded-md"
+              />
+            </Link>
+          </div>
+
+          {/* Logo */}
+          <picture className="flex items-center justify-center">
+            <source srcSet="/images/xx88.png" media="(min-width: 1024px)" />
+            <img
+              src="/images/mb-xx88.png"
+              alt="Logo XX88"
+              width="300"
+              height="120"
+            />
+          </picture>
+        </div>
+        <img
+          className="absolute inset-0 h-full w-full md:hidden"
+          src="/images/bg-mb-new.png"
+          alt="Background"
         />
         <div
           className="absolute inset-0 hidden bg-cover bg-center md:block"
           style={{ backgroundImage: 'url(/images/bg-new.png)' }}
-        /> */}
-
-        {/* Horse decoration only mobile */}
-        <img
-          src="/images/mb-horse.png"
-          alt="Horse Left"
-          className="absolute left-1/2 top-1/2 h-[322px]
-           w-[326.5px] -translate-x-1/2
-           -translate-y-1/2 opacity-100 md:hidden"
         />
-
-        {/* form start */}
-        <div className="relative z-10 min-h-screen md:pt-4">
+        {/* FORM START */}
+        <div className="relative z-10 mt-8 min-h-screen md:pt-4">
           <div className="relative z-20 mx-auto flex h-[330px] w-[419px] items-center justify-center md:h-[561px] md:w-[714px]">
             {/* modal background*/}
             <img
@@ -157,7 +177,7 @@ export function Body() {
               alt="Horse Left"
               className="absolute left-[400px] top-1/2 z-[-1] hidden -translate-y-1/2 md:block"
             />
-            {/* form start */}
+            {/* FORM */}
             <div className="md:top-4/3 absolute inset-0 left-1/2 top-[40%] mt-2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:p-6 md:p-5">
               <form
                 onSubmit={handleSubmit}
@@ -189,7 +209,6 @@ export function Body() {
                         autoComplete="one-time-code"
                       />
                     </div>
-
                     {codeError && (
                       <p className="mt-1 text-sm text-white md:text-base">
                         {codeError}
@@ -197,7 +216,6 @@ export function Body() {
                     )}
                   </div>
                 </div>
-
                 {/* account */}
                 <div className="flex items-center justify-center space-y-1 md:mb-5">
                   <div className="relative">
@@ -229,7 +247,7 @@ export function Body() {
                     )}
                   </div>
                 </div>
-                {/* catpcha */}
+                {/* CATPCHA */}
                 <div
                   className={`relative z-[2147483647] flex h-[70px] w-full flex-col items-center justify-center overflow-visible md:h-[78px] ${captchaError ? 'mb-4 md:mb-5' : 'mb-0 md:mb-5'}`}
                 >
@@ -259,7 +277,7 @@ export function Body() {
                     </div>
                   )}
 
-                  {captchaError && (
+                  {/* {captchaError && (
                     <p className="-mt-4 text-sm text-white md:mt-0 md:text-base">
                       {captchaError}{' '}
                       <button
@@ -270,45 +288,53 @@ export function Body() {
                         Thử lại
                       </button>
                     </p>
-                  )}
+                  )} */}
                 </div>
 
-                {/* button */}
+                {/* BUTTON */}
                 <div
                   className={`md:top-5/4 absolute left-1/2 top-[115%] z-10 flex -translate-x-1/2 justify-center ${captchaError ? '' : '-mt-[10px] md:mt-0'}`}
                 >
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex h-[103px] w-[244px] items-center justify-center bg-cover bg-center text-sm font-bold text-white transition-opacity duration-200 hover:opacity-90 disabled:opacity-60 md:h-[177px] md:w-[416px] md:pt-4 md:text-2xl"
+                    className=" h-[103px] w-[244px]  bg-cover bg-center text-sm font-bold  transition  hover:brightness-110 active:scale-95 md:h-[177px] md:w-[416px] md:pt-4 md:text-2xl"
                     style={{
                       backgroundImage: 'url(/images/btn-check-new.png)',
                     }}
                     aria-label="Kiểm tra ngay"
-                  >
-                    {/* KIỂM TRA NGAY */}
-                  </button>
+                  ></button>
                 </div>
               </form>
             </div>
           </div>
-
-          <PopUpSuggest
+          {/* PopUp */}
+          <PopUpSuggestTet
             open={popupOpen}
             onClose={() => setPopupOpen(false)}
             title="Thông báo"
             variant={popupVariant}
           >
             <p className="text-center">{popupMsg}</p>
-          </PopUpSuggest>
-          {/* banner */}
-          <img
-            src="/images/banner-tet.png"
-            alt="XX88 Banner"
-            className="absolute left-1/2 top-[72%] max-w-full -translate-x-1/2 -translate-y-1/2 md:top-[80%]"
-          />
+          </PopUpSuggestTet>
+          {/*************/}
         </div>
       </div>
+      {/* BANNER */}
+      <section>
+        {/* HORSE DECORATION MOBILE */}
+        <img
+          src="/images/mb-horse-2.png"
+          alt="Horse Left"
+          className="absolute left-1/2 top-1/2 h-[322px] w-[326.5px] -translate-x-1/2 -translate-y-1/2 opacity-100 md:hidden"
+        />
+        {/* BANNER*/}
+        <img
+          src="/images/banner-tet.png"
+          alt="XX88 Banner"
+          className="absolute left-1/2 top-[65%] max-w-full -translate-x-1/2 -translate-y-1/2 md:top-[70%]"
+        />
+      </section>
     </>
   );
 }

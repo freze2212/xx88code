@@ -1,25 +1,12 @@
-import { Header } from '@/components/layout/Header';
-import { Sidebar } from '@/components/layout/Sidebar';
 import { Body } from '@/components/layout/Body';
-import { Header2 } from '@/components/layout/Header2';
+import FooterTet from '@/components/layout/FooterTet';
+import PopUpSuggest from '@/components/popUp/PopUpSuggest';
 
 export default function Home() {
   return (
-    <main className="relative max-h-screen min-h-screen w-full md:min-h-screen">
-      {/* <Sidebar /> */}
-      {/* <Sidebar /> */}
-      <div
-        className="absolute inset-0 bg-cover bg-center md:hidden"
-        style={{ backgroundImage: 'url(/images/bg-new.png)' }}
-      />
-      <div
-        className="absolute inset-0 hidden bg-cover bg-center md:block"
-        style={{ backgroundImage: 'url(/images/bg-new.png)' }}
-      />
-      <div />
-
-      <Header2 />
+    <main className="relative w-full md:min-h-screen">
       <Body />
+      <FooterTet />
     </main>
   );
 }
