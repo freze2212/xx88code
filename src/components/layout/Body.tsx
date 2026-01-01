@@ -153,7 +153,7 @@ export function Body() {
         />
         {/* FORM START */}
         <div className="relative z-10 mt-8 min-h-screen md:pt-4">
-          <div className="relative z-20 mx-auto flex h-[330px] w-[419px] items-center justify-center md:h-[561px] md:w-[714px]">
+          <div className="relative z-20 mx-auto flex h-[341px] w-[419px] items-center justify-center md:h-[561px] md:w-[714px]">
             {/* modal background*/}
             <img
               src="/images/modal-code-mb-new.png"
@@ -231,7 +231,7 @@ export function Body() {
                           setAccountError('');
                         }}
                         placeholder="Nhập tên người dùng"
-                        className={`h-[28px] w-[292px] rounded-[38.06px] py-2.5 text-center text-sm focus:border focus:border-[#00AEEE] focus:outline-none sm:text-xl md:h-[48px] md:w-[498px] md:rounded-[64px]  md:text-lg ${
+                        className={`h-[28px] w-[292px] rounded-[38.06px] py-2.5 text-center text-sm focus:border focus:border-[#00AEEE] focus:outline-none sm:text-xl md:h-[48px] md:w-[498px] md:rounded-[64px]  md:text-base ${
                           codeError
                             ? 'border border-red-500'
                             : 'border border-gray-200'
@@ -277,7 +277,7 @@ export function Body() {
                     </div>
                   )}
 
-                  {/* {captchaError && (
+                  {captchaError && (
                     <p className="-mt-4 text-sm text-white md:mt-0 md:text-base">
                       {captchaError}{' '}
                       <button
@@ -288,7 +288,7 @@ export function Body() {
                         Thử lại
                       </button>
                     </p>
-                  )} */}
+                  )}
                 </div>
 
                 {/* BUTTON */}
@@ -326,13 +326,13 @@ export function Body() {
         <img
           src="/images/mb-horse-2.png"
           alt="Horse Left"
-          className="absolute left-1/2 top-1/2 h-[322px] w-[326.5px] -translate-x-1/2 -translate-y-1/2 opacity-100 md:hidden"
+          className="absolute left-1/2 top-[52%] h-[322px] w-[326.5px] -translate-x-1/2 -translate-y-1/2 opacity-100 md:hidden"
         />
         {/* BANNER*/}
         <img
           src="/images/banner-tet.png"
           alt="XX88 Banner"
-          className="absolute left-1/2 top-[65%] max-w-full -translate-x-1/2 -translate-y-1/2 md:top-[70%]"
+          className="absolute left-1/2 top-[67%] max-w-full -translate-x-1/2 -translate-y-1/2 md:top-[70%]"
         />
       </section>
     </>

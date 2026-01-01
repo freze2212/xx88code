@@ -48,52 +48,52 @@ export default function PopUpSuggestTet({
         <img
           src="/images/popup-bg.png"
           alt="Popup Background"
-          className="relative h-[297px] w-[325px] md:h-[578px] md:w-[618px]"
+          className="relative h-[305px] w-[325px] md:h-[578px] md:w-[618px]"
         />
-        <div className="absolute left-1/2 top-[29%] -translate-x-1/2 md:top-[29%]">
-          {/* Icon trạng thái (✓ hoặc !) */}
-          <div className="mb-2 flex justify-center">
-            {isError ? (
-              <img
-                src="/images/popup-warning.png"
-                alt="Warning Icon"
-                className="h-[70px] w-[70px] md:h-[162px] md:w-[162px]"
-              />
-            ) : (
-              <img
-                src="/images/popup-v-tick.png"
-                alt="V-Tick Icon"
-                className="h-[85px] w-[85px] md:h-[162px] md:w-[162px]"
-              />
-            )}
-          </div>
-
-          {/* Nội dung */}
-          <div className="mb-1 px-1 md:mb-6">
-            <p
-              className={`text-sm font-semibold leading-relaxed md:text-base ${
-                isError ? 'text-white' : 'text-[#FFA100]'
-              }`}
-            >
-              {children}
-            </p>
-          </div>
-
-          {/* Nút xác nhận */}
-          <button
-            type="button"
-            onClick={onClose}
-            className=" h-[86px] w-[203px] transition hover:brightness-110 active:scale-95 md:h-[163px] md:w-[385px]"
-            aria-label="Xác nhận"
-          >
+        {/* <div className="absolute left-1/2 top-[29%] -translate-x-1/2 md:top-[29%]"> */}
+        {/* Icon trạng thái (✓ hoặc !) */}
+        <div className="mb-2 flex justify-center">
+          {isError ? (
             <img
-              className="h-auto w-full"
-              src="/images/popup-btn.png"
-              alt="Nút xác nhận"
+              src="/images/popup-warning.png"
+              alt="Warning Icon"
+              className="absolute left-1/2 top-[25%] h-[70px] w-[70px] -translate-x-1/2 md:top-[25%] md:h-[162px] md:w-[162px]"
             />
-          </button>
+          ) : (
+            <img
+              src="/images/popup-v-tick.png"
+              alt="V-Tick Icon"
+              className="absolute left-1/2 top-[25%] h-[85px] w-[85px] -translate-x-1/2 md:top-[25%] md:h-[162px] md:w-[162px]"
+            />
+          )}
         </div>
+
+        {/* Nội dung */}
+        <div className="absolute left-1/2 top-[50%] mb-1 -translate-x-1/2 px-1 md:top-[55%] md:mb-6">
+          <p
+            className={`text-sm font-semibold leading-relaxed md:text-base ${
+              isError ? 'text-white' : 'text-[#FFA100]'
+            }`}
+          >
+            {children}
+          </p>
+        </div>
+
+        {/* Nút xác nhận */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute left-1/2 top-[65%] h-[86px] w-[203px] -translate-x-1/2 transition hover:brightness-110 active:scale-95 md:top-[65%] md:h-[163px] md:w-[385px]"
+          aria-label="Xác nhận"
+        >
+          <img
+            className="h-auto w-full"
+            src="/images/popup-btn.png"
+            alt="Nút xác nhận"
+          />
+        </button>
       </div>
+      {/* </div> */}
     </div>,
     document.body
   );
