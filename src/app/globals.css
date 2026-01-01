@@ -44,3 +44,18 @@
 .capchaGG iframe{
   width: 100%!important;
 }
+
+@media (prefers-color-scheme: dark) {
+  .theme-auto #content {
+    border-color: #797979;
+    background-color: #ffffff; /* đổi captcha sang trắng */
+  }
+}
+
+:root {
+  --turnstile-bg: #f0f0f0; /* Light gray background */
+}
+
+[data-theme="dark"] {
+  --turnstile-bg: #333333; /* Dark gray background for dark mode */
+}
