@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Turnstile } from '@marsidev/react-turnstile';
-import PopUpSuggest from '../popUp/PopUpSuggest';
+// import PopUpSuggest from '../popUp/PopUpSuggest';
 import Link from 'next/link';
 import PopUpSuggestTet from '../popUp/PopUpSuggestTet';
 // import SnowEffect from '../ui/SnowEffect';
@@ -330,7 +330,7 @@ export function Body() {
         />
         {/* BANNER*/}
         <img
-          src="/images/banner-tet.png"
+          src="/images/banner-gif.gif"
           alt="XX88 Banner"
           className="absolute left-1/2 top-[67%] max-w-full -translate-x-1/2 -translate-y-1/2 md:top-[70%]"
         />
