@@ -113,7 +113,7 @@ export function Body() {
     <>
       {/* <SnowEffect /> */}
       {/*  */}
-      <div className="md:h-min-screen relative w-full">
+      <div className=" relative w-full">
         {/* HEADER START */}
         <div className="mb-10px relative z-40 pt-[14px] md:flex md:flex-col md:items-center md:justify-center lg:pt-[42px]">
           <div className="flex justify-center">
@@ -142,6 +142,7 @@ export function Body() {
             />
           </picture>
         </div>
+        {/* background */}
         <img
           className="absolute inset-0 h-full w-full md:hidden"
           src="/images/bg-mb-new.png"
@@ -151,190 +152,192 @@ export function Body() {
           className="absolute inset-0 hidden bg-cover bg-center md:block"
           style={{ backgroundImage: 'url(/images/bg-new.png)' }}
         />
+
         {/* FORM START */}
-        <div className="relative z-10 mt-8 min-h-screen md:pt-4">
-          <div className="relative z-20 mx-auto flex h-[341px] w-[419px] items-center justify-center md:h-[561px] md:w-[714px]">
-            {/* modal background*/}
-            <img
-              src="/images/modal-code-mb-new.png"
-              alt="Modal Background Mobile"
-              className="block h-full w-full object-cover md:hidden"
-            />
-            <img
-              src="/images/modal-code-bg-new.png"
-              alt="Modal Background"
-              className="hidden h-auto w-full object-cover md:block"
-            />
-            {/* Left Horse Decoration */}
-            <img
-              src="/images/left-horse.png"
-              alt="Horse Left"
-              className="absolute right-[600px] top-1/2 z-[-1] hidden -translate-y-1/2 md:block"
-            />
-            {/* Right Horse Decoration */}
-            <img
-              src="/images/right-horse.png"
-              alt="Horse Left"
-              className="absolute left-[400px] top-1/2 z-[-1] hidden -translate-y-1/2 md:block"
-            />
-            {/* FORM */}
-            <div className="md:top-4/3 absolute inset-0 left-1/2 top-[40%] mt-2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:p-6 md:p-5">
-              <form
-                onSubmit={handleSubmit}
-                className="mx-auto w-full max-w-[85%] md:max-w-[60%]"
-                noValidate
-              >
-                {/* code */}
-                <div className="mb-1 flex items-center justify-center space-y-1 md:mb-2">
-                  <div className="relative">
-                    <div className="flex flex-col items-center justify-center">
-                      <p className="bg-gradient-to-t from-[#FF6A00] to-[#F4DB8D] bg-clip-text text-center text-[16px] font-bold text-[#FF6A00] text-transparent md:text-[23px] ">
-                        Mã code:
-                      </p>
-
-                      <input
-                        type="text"
-                        value={code}
-                        onChange={(e) => {
-                          setCode(e.target.value);
-                          setCodeError('');
-                        }}
-                        placeholder="Nhập mã code"
-                        className={` h-[28px] w-[292px] rounded-[38.06px] py-2.5 text-center text-sm focus:border focus:border-[#00AEEE] focus:outline-none sm:text-xl md:h-[48px] md:w-[498px] md:rounded-[64px]  md:text-lg ${
-                          codeError
-                            ? 'border border-red-500'
-                            : 'border border-gray-200'
-                        }`}
-                        style={{ backgroundColor: 'rgba(241, 241, 241, 1)' }}
-                        autoComplete="one-time-code"
-                      />
-                    </div>
-                    {codeError && (
-                      <p className="mt-1 text-sm text-white md:text-base">
-                        {codeError}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                {/* account */}
-                <div className="flex items-center justify-center space-y-1 md:mb-5">
-                  <div className="relative">
-                    <div className="flex flex-col items-center justify-center">
-                      <p className="bg-gradient-to-t from-[#FF6A00] to-[#F4DB8D] bg-clip-text text-center text-[16px] font-bold text-[#FF6A00] text-transparent md:text-[23px]">
-                        Tên tài khoản:
-                      </p>
-                      <input
-                        type="text"
-                        value={account}
-                        onChange={(e) => {
-                          setAccount(e.target.value);
-                          setAccountError('');
-                        }}
-                        placeholder="Nhập tên người dùng"
-                        className={`h-[28px] w-[292px] rounded-[38.06px] py-2.5 text-center text-sm focus:border focus:border-[#00AEEE] focus:outline-none sm:text-xl md:h-[48px] md:w-[498px] md:rounded-[64px]  md:text-base ${
-                          codeError
-                            ? 'border border-red-500'
-                            : 'border border-gray-200'
-                        }`}
-                        style={{ backgroundColor: 'rgba(241, 241, 241, 1)' }}
-                        autoComplete="username"
-                      />
-                    </div>
-                    {accountError && (
-                      <p className="mt-1 text-sm text-white md:text-base">
-                        {accountError}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                {/* CATPCHA */}
-                <div
-                  className={`relative z-[2147483647] flex h-[70px] w-full flex-col items-center justify-center overflow-visible md:h-[78px] ${captchaError ? 'mb-4 md:mb-5' : 'mb-0 md:mb-5'}`}
+        <div className="md:h-min-screen relative z-10 mt-8 min-h-screen md:pt-4">
+          <div className=" relative z-10 mt-8  md:pt-4">
+            <div className="relative z-20 mx-auto flex h-[341px] w-[419px] items-center justify-center md:h-[561px] md:w-[714px]">
+              {/* modal background*/}
+              <img
+                src="/images/modal-code-mb-new.png"
+                alt="Modal Background Mobile"
+                className="block h-full w-full object-cover md:hidden"
+              />
+              <img
+                src="/images/modal-code-bg-new.png"
+                alt="Modal Background"
+                className="hidden h-auto w-full object-cover md:block"
+              />
+              {/* Left Horse Decoration */}
+              <img
+                src="/images/left-horse.png"
+                alt="Horse Left"
+                className="absolute right-[600px] top-1/2 z-[-1] hidden -translate-y-1/2 md:block"
+              />
+              {/* Right Horse Decoration */}
+              <img
+                src="/images/right-horse.png"
+                alt="Horse Left"
+                className="absolute left-[400px] top-1/2 z-[-1] hidden -translate-y-1/2 md:block"
+              />
+              {/* FORM */}
+              <div className="md:top-4/3 absolute inset-0 left-1/2 top-[40%] mt-2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:p-6 md:p-5">
+                <form
+                  onSubmit={handleSubmit}
+                  className="relative mx-auto w-full"
+                  noValidate
                 >
-                  {mounted && siteKey && (
-                    <div
-                      className="my-2 scale-[0.70]  md:mt-5 md:origin-top-left md:scale-100"
-                      style={{ width: 304, height: 78 }}
-                    >
-                      <Turnstile
-                        options={{
-                          theme: 'light',
-                          size: 'normal',
-                        }}
-                        key={captchaKey}
-                        siteKey={siteKey}
-                        onSuccess={(token: string) => {
-                          setCaptchaToken(token);
-                          setCaptchaError('');
-                        }}
-                        onExpire={() => resetCaptcha('Captcha đã hết hạn')}
-                        onError={() => {
-                          // không reset ngay để tránh vòng lặp remount
-                          setCaptchaError('Không tải được Captcha');
-                        }}
-                        // options={{ size: 'normal' }}
-                      />
-                    </div>
-                  )}
+                  {/* code */}
+                  <div className="mb-1 flex items-center justify-center space-y-1 md:mb-2">
+                    <div className="relative">
+                      <div className="flex flex-col items-center justify-center">
+                        <p className="bg-gradient-to-t from-[#FF6A00] to-[#F4DB8D] bg-clip-text text-center text-[16px] font-bold text-[#FF6A00] text-transparent md:text-[23px] ">
+                          Mã code:
+                        </p>
 
-                  {captchaError && (
-                    <p className="-mt-4 text-sm text-white md:mt-0 md:text-base">
-                      {captchaError}{' '}
-                      <button
-                        type="button"
-                        className="text-red-500 underline"
-                        onClick={() => resetCaptcha()}
+                        <input
+                          type="text"
+                          value={code}
+                          onChange={(e) => {
+                            setCode(e.target.value);
+                            setCodeError('');
+                          }}
+                          placeholder="Nhập mã code"
+                          className={` h-[28px] w-[292px] rounded-[38.06px] py-2.5 text-center text-sm focus:border focus:border-[#00AEEE] focus:outline-none sm:text-xl md:h-[48px] md:w-[498px] md:rounded-[64px]  md:text-lg ${
+                            codeError
+                              ? 'border border-red-500'
+                              : 'border border-gray-200'
+                          }`}
+                          style={{ backgroundColor: 'rgba(241, 241, 241, 1)' }}
+                          autoComplete="one-time-code"
+                        />
+                      </div>
+                      {codeError && (
+                        <p className="mt-1 text-sm text-white md:text-base">
+                          {codeError}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  {/* account */}
+                  <div className="flex items-center justify-center space-y-1 md:mb-5">
+                    <div className="relative">
+                      <div className="flex flex-col items-center justify-center">
+                        <p className="bg-gradient-to-t from-[#FF6A00] to-[#F4DB8D] bg-clip-text text-center text-[16px] font-bold text-[#FF6A00] text-transparent md:text-[23px]">
+                          Tên tài khoản:
+                        </p>
+                        <input
+                          type="text"
+                          value={account}
+                          onChange={(e) => {
+                            setAccount(e.target.value);
+                            setAccountError('');
+                          }}
+                          placeholder="Nhập tên người dùng"
+                          className={`h-[28px] w-[292px] rounded-[38.06px] py-2.5 text-center text-sm focus:border focus:border-[#00AEEE] focus:outline-none sm:text-xl md:h-[48px] md:w-[498px] md:rounded-[64px]  md:text-base ${
+                            codeError
+                              ? 'border border-red-500'
+                              : 'border border-gray-200'
+                          }`}
+                          style={{ backgroundColor: 'rgba(241, 241, 241, 1)' }}
+                          autoComplete="username"
+                        />
+                      </div>
+                      {accountError && (
+                        <p className="mt-1 text-sm text-white md:text-base">
+                          {accountError}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  {/* CATPCHA */}
+                  <div
+                    className={`relative z-[2147483647] flex h-[70px] w-full flex-col items-center justify-center overflow-visible md:h-[78px] ${captchaError ? 'mb-4 md:mb-5' : 'mb-0 md:mb-5'}`}
+                  >
+                    {mounted && siteKey && (
+                      <div
+                        className="my-2 scale-[0.70]  md:mt-5 md:origin-top-left md:scale-100"
+                        style={{ width: 304, height: 78 }}
                       >
-                        Thử lại
-                      </button>
-                    </p>
-                  )}
-                </div>
+                        <Turnstile
+                          options={{
+                            theme: 'light',
+                            size: 'normal',
+                          }}
+                          key={captchaKey}
+                          siteKey={siteKey}
+                          onSuccess={(token: string) => {
+                            setCaptchaToken(token);
+                            setCaptchaError('');
+                          }}
+                          onExpire={() => resetCaptcha('Captcha đã hết hạn')}
+                          onError={() => {
+                            // không reset ngay để tránh vòng lặp remount
+                            setCaptchaError('Không tải được Captcha');
+                          }}
+                          // options={{ size: 'normal' }}
+                        />
+                      </div>
+                    )}
 
-                {/* BUTTON */}
-                <div
-                  className={`md:top-5/4 absolute left-1/2 top-[115%] z-10 flex -translate-x-1/2 justify-center ${captchaError ? '' : '-mt-[10px] md:mt-0'}`}
-                >
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className=" h-[103px] w-[244px]  bg-cover bg-center text-sm font-bold  transition  hover:brightness-110 active:scale-95 md:h-[177px] md:w-[416px] md:pt-4 md:text-2xl"
-                    style={{
-                      backgroundImage: 'url(/images/btn-check-new.png)',
-                    }}
-                    aria-label="Kiểm tra ngay"
-                  ></button>
-                </div>
-              </form>
+                    {captchaError && (
+                      <p className="-mt-4 text-sm text-white md:mt-0 md:text-base">
+                        {captchaError}{' '}
+                        <button
+                          type="button"
+                          className="text-red-500 underline"
+                          onClick={() => resetCaptcha()}
+                        >
+                          Thử lại
+                        </button>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* BUTTON */}
+                  <div
+                    className={`md:top-5/4 absolute left-1/2 top-[115%] z-10 flex -translate-x-1/2 justify-center ${captchaError ? '' : '-mt-[10px] md:mt-0'}`}
+                  >
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className=" h-[103px] w-[244px]  bg-cover bg-center text-sm font-bold  transition  hover:brightness-110 active:scale-95 md:h-[177px] md:w-[416px] md:pt-4 md:text-2xl"
+                      style={{
+                        backgroundImage: 'url(/images/btn-check-new.png)',
+                      }}
+                      aria-label="Kiểm tra ngay"
+                    ></button>
+                  </div>
+                </form>
+              </div>
             </div>
+            {/* PopUp */}
+            <PopUpSuggestTet
+              open={popupOpen}
+              onClose={() => setPopupOpen(false)}
+              title="Thông báo"
+              variant={popupVariant}
+            >
+              <p className="text-center">{popupMsg}</p>
+            </PopUpSuggestTet>
+            {/*************/}
           </div>
-          {/* PopUp */}
-          <PopUpSuggestTet
-            open={popupOpen}
-            onClose={() => setPopupOpen(false)}
-            title="Thông báo"
-            variant={popupVariant}
-          >
-            <p className="text-center">{popupMsg}</p>
-          </PopUpSuggestTet>
-          {/*************/}
+          {/* BANNER */}
+          <section className="mt-10 flex flex-col items-center justify-center md:mt-28">
+            <img
+              src="/images/mb-horse-2.png"
+              alt="Horse Left"
+              className="h-[322px] w-[326.5px] md:hidden"
+            />
+            <img
+              src="/images/banner-gif-new.gif"
+              alt="XX88 Banner"
+              // className="absolute left-1/2 top-[67%] max-w-full -translate-x-1/2 -translate-y-1/2 md:top-[55%]"
+              className="mt-8 h-auto md:mt-0 md:w-[1045]"
+            />
+          </section>
         </div>
       </div>
-      {/* BANNER */}
-      <section>
-        {/* HORSE DECORATION MOBILE */}
-        <img
-          src="/images/mb-horse-2.png"
-          alt="Horse Left"
-          className="absolute left-1/2 top-[52%] h-[322px] w-[326.5px] -translate-x-1/2 -translate-y-1/2 opacity-100 md:hidden"
-        />
-        {/* BANNER*/}
-        <img
-          src="/images/banner-gif.gif"
-          alt="XX88 Banner"
-          className="absolute left-1/2 top-[67%] max-w-full -translate-x-1/2 -translate-y-1/2 md:top-[70%]"
-        />
-      </section>
     </>
   );
 }
