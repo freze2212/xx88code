@@ -6,6 +6,7 @@ import { Turnstile } from '@marsidev/react-turnstile';
 // import PopUpSuggest from '../popUp/PopUpSuggest';
 import Link from 'next/link';
 import PopUpSuggestTet from '../popUp/PopUpSuggestTet';
+import Header from './Header';
 // import SnowEffect from '../ui/SnowEffect';
 
 export function Body() {
@@ -111,37 +112,8 @@ export function Body() {
 
   return (
     <>
-      {/* <SnowEffect /> */}
-      {/*  */}
       <div className=" relative w-full">
-        {/* HEADER START */}
-        <div className="mb-10px relative z-40 pt-[14px] md:flex md:flex-col md:items-center md:justify-center lg:pt-[42px]">
-          <div className="flex justify-center">
-            <Link
-              href="https://pc-xx88-link.rr88tino.workers.dev/"
-              className="btn-hover mb-3 lg:absolute lg:right-[30px] lg:top-[42px]"
-            >
-              <Image
-                src="/images/btn-home.png"
-                alt="Trang Chủ"
-                width={201}
-                height={41}
-                className="rounded-md"
-              />
-            </Link>
-          </div>
-
-          {/* Logo */}
-          <picture className="flex items-center justify-center">
-            <source srcSet="/images/xx88.png" media="(min-width: 1024px)" />
-            <img
-              src="/images/mb-xx88.png"
-              alt="Logo XX88"
-              width="300"
-              height="120"
-            />
-          </picture>
-        </div>
+        <Header />
         {/* background */}
         <img
           className="absolute inset-0 h-full w-full md:hidden"
@@ -153,7 +125,6 @@ export function Body() {
           style={{ backgroundImage: 'url(/images/bg-new.png)' }}
         />
 
-        {/* FORM START */}
         <div className="md:h-min-screen relative z-10 mt-8 min-h-screen md:pt-4">
           <div className=" relative z-10 mt-8  md:pt-4">
             <div className="relative z-20 mx-auto flex h-[341px] w-[419px] items-center justify-center md:h-[561px] md:w-[714px]">
@@ -320,7 +291,6 @@ export function Body() {
             >
               <p className="text-center">{popupMsg}</p>
             </PopUpSuggestTet>
-            {/*************/}
           </div>
           {/* BANNER */}
           <section className="mt-10 flex flex-col items-center justify-center md:mt-28">
@@ -330,9 +300,8 @@ export function Body() {
               className="h-[322px] w-[326.5px] md:hidden"
             />
             <img
-              src="/images/banner-gif-new.gif"
+              src="/images/banner-gif-update.gif"
               alt="XX88 Banner"
-              // className="absolute left-1/2 top-[67%] max-w-full -translate-x-1/2 -translate-y-1/2 md:top-[55%]"
               className="mt-8 h-auto md:mt-0 md:w-[1045]"
             />
           </section>
