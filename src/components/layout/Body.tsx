@@ -300,7 +300,7 @@ export function Body() {
               className="h-[322px] w-[326.5px] md:hidden"
             />
             <img
-              src="/images/banner-gif-update.gif"
+              src="/images/banner-gif-update-2.gif"
               alt="XX88 Banner"
               className="mt-8 h-auto md:mt-0 md:w-[1045]"
             />
