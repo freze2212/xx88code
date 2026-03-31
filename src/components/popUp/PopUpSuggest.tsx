@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import Image from 'next/image';
 
 type Props = {
   open: boolean;
@@ -25,6 +26,17 @@ export default function PopUpSuggest({
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
+
+  useEffect(() => {
     if (!open || !autoCloseMs) return;
     const t = setTimeout(onClose, autoCloseMs);
     return () => clearTimeout(t);
@@ -41,48 +53,77 @@ export default function PopUpSuggest({
       aria-modal="true"
       aria-label={title}
     >
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div 
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300" 
+        onClick={onClose} 
+      />
 
       {/* Card */}
-      <div className="relative z-10 w-[92%] max-w-[380px] rounded-[32px] border-[10px] border-solid border-[#02ABED] bg-gradient-to-b from-[#E6F6FF] to-[#FFFFFF] p-[3px] shadow-2xl">
-        <div className="flex flex-col items-center gap-3 rounded-[28px] bg-white px-6 pb-3 pt-4 text-center md:px-8 md:pb-8 md:pt-7">
-          {/* Icon trạng thái (✓ hoặc !) */}
-          <div className="mb-4 flex justify-center">
+      <div className="relative z-10 w-[95%] md:w-[60vw]">
+        <Image
+          src="/images/body/background-modal.png"
+          alt="Popup Background"
+          width={1000}
+          height={600}
+          className="h-auto w-full"
+          priority
+        />
+        {/* Content Container (Overlay) */}
+        <div className="absolute inset-0 flex flex-col items-center justify-between pb-[4%] pt-[8%] md:pb-[13px] md:pt-[20%]">
+          {/* Icon Section */}
+          <div className="relative flex-shrink-0">
+            {isError ? (
+              <div className="relative h-[80px] w-[80px] md:h-[160px] md:w-[160px]">
+                <Image
+                  src="/images/body/popup-warning.png"
+                  alt="Warning Icon"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            ) : (
+              <div className="relative h-[90px] w-[90px] md:h-[180px] md:w-[180px]">
+                <Image
+                  src="/images/body/popup-v-tick.png"
+                  alt="V-Tick Icon"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Text Section */}
+          <div className="flex flex-grow items-center justify-center px-6 text-center md:px-12 md:-mt-10">
             <div
-              className={`flex h-20 w-20 items-center justify-center rounded-full ${
-                isError ? 'bg-red-500' : 'bg-[#00AEEF]'
+              className={`text-lg font-bold leading-tight md:text-3xl lg:text-3xl ${
+                isError ? 'text-[#070E23]' : 'text-[#070E23]'
               }`}
+              style={!isError ? {
+                textTransform: 'uppercase',
+              } : {}}
             >
-              <span className="text-5xl font-bold leading-none text-white">
-                {isError ? '!' : '✓'}
-              </span>
+              {children}
             </div>
           </div>
 
-          {/* Nội dung */}
-          <div className="mb-6 px-1">
-            <p
-              className={`text-sm font-semibold leading-relaxed md:text-base ${
-                isError ? 'text-red-500' : 'text-green-500'
-              }`}
+          {/* Button Section */}
+          <div className="flex-shrink-0">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex h-[40px] w-[200px] items-center justify-center rounded-full text-sm font-bold uppercase text-white transition hover:brightness-110 active:scale-95 md:h-[70px] md:w-[370px] md:text-2xl"
+              style={{
+                background: 'linear-gradient(180deg, #00B1FF 0%, #007AFF 100%)',
+                border: '3.5px solid #B0853D',
+                boxShadow: '0px 0px 0px 1.5px #F4CF86, inset 0px 2px 6px rgba(255, 255, 255, 0.4), 0px 4px 10px rgba(0, 0, 0, 0.4)',
+                textShadow: '0px 2px 2px rgba(0, 0, 0, 0.5)',
+              }}
+              aria-label="Xác nhận"
             >
-              {children}
-            </p>
+              Xác nhận
+            </button>
           </div>
-
-          {/* Nút xác nhận */}
-          <button
-            type="button"
-            onClick={onClose}
-            className="inline-flex min-w-[180px] items-center justify-center rounded-full px-8 py-2.5 text-sm font-bold uppercase tracking-wide text-white shadow-md transition hover:brightness-110 active:scale-95 md:text-base"
-            style={{
-              background:
-                'radial-gradient(circle at 50% 50%, #33C6FA 0%, #02abed 70%)',
-            }}
-            aria-label="Xác nhận"
-          >
-            Xác nhận
-          </button>
         </div>
       </div>
     </div>,

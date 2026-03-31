@@ -9,10 +9,14 @@ export const metadata: Metadata = {
   description: 'Nhập code khuyến mãi XX88 - Đối tác chính thức Juventus FC & KJC',
   keywords: ['xx88', 'khuyến mãi', 'juventus', 'kjc', 'code'],
   authors: [{ name: 'XX88 Team' }],
-  viewport: 'width=device-width, initial-scale=1',
   icons: {
-    icon: 'images/fav-xx88.png',
+    icon: 'images/header/fav-xx88.png',
   },
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({
