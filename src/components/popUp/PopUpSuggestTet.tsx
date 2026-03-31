@@ -59,20 +59,41 @@ export default function PopUpSuggestTet({
       />
 
       {/* Card */}
-      <div className="relative z-10 w-[100%] max-w-[500px] scale-[1.1] md:scale-100 md:w-[60vw] md:max-w-none transition-transform duration-300 md:-translate-y-10">
+      <div className={`relative z-10 w-[100%] max-w-[500px] scale-[1.1] ${isError ? '-translate-x-4' : ''} md:translate-x-0 md:scale-100 md:w-[60vw] md:max-w-none transition-transform duration-300 md:-translate-y-10`}>
         <Image
-          src="/images/body/background-modal.png"
+          src={isError ? "/images/body/background-modal.png" : "/images/body/modal.gif"}
           alt="Popup Background"
           width={1000}
           height={600}
           className="h-auto w-full"
           priority
         />
+
         {/* Content Container (Overlay) */}
-        <div className="absolute inset-0 flex flex-col items-center justify-between pl-[25px] pb-[1%] pt-[20%] md:pb-[13px] md:pt-[20%] md:pl-[80px]">
-          {/* Icon Section */}
-          <div className="relative flex-shrink-0">
-            {isError ? (
+        {!isError ? (
+          <>
+            {/* Success UI: Centered text from GIF template */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center top-[30px] md:top-[70px]">
+              <div className="flex px-6 text-center md:px-12">
+                <div
+                  className="text-[11px] font-bold leading-tight md:text-3xl lg:text-3xl text-[#070E23]"
+                  style={{ textTransform: 'uppercase' }}
+                >
+                  {children}
+                </div>
+              </div>
+            </div>
+
+            {/* Virtual Button Mapping (Hotspot) for Success GIF */}
+            <div
+              onClick={onClose}
+              className="absolute bottom-[6%] md:bottom-[19%] left-[50%] -translate-x-1/2 w-[150px] h-[40px] md:w-[410px] md:h-[90px] cursor-pointer z-20"
+            />
+          </>
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-between pl-[25px] pb-[1%] pt-[20%] md:pb-[13px] md:pt-[20%] md:pl-[80px]">
+            {/* Icon Section (Error) */}
+            <div className="relative flex-shrink-0">
               <div className="relative h-[45px] w-[45px] md:h-[160px] md:w-[160px]">
                 <Image
                   src="/images/body/popup-warning.png"
@@ -81,48 +102,35 @@ export default function PopUpSuggestTet({
                   className="object-contain"
                 />
               </div>
-            ) : (
-              <div className="relative h-[45px] w-[45px] md:h-[180px] md:w-[180px]">
-                <Image
-                  src="/images/body/popup-v-tick.png"
-                  alt="V-Tick Icon"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            )}
-          </div>
+            </div>
 
-          {/* Text Section */}
-          <div className="flex flex-grow items-center justify-center px-6 text-center md:px-12 md:-mt-10">
-            <div
-              className={`text-[11px] font-bold leading-tight md:text-3xl lg:text-3xl ${isError ? 'text-[#070E23]' : 'text-[#070E23]'
-                }`}
-              style={!isError ? {
-                textTransform: 'uppercase',
-              } : {}}
-            >
-              {children}
+            {/* Text Section (Error) */}
+            <div className="flex flex-grow items-center justify-center px-6 text-center md:px-12 md:-mt-10">
+              <div
+                className="text-[11px] font-bold leading-tight md:text-3xl lg:text-3xl text-[#070E23]"
+              >
+                {children}
+              </div>
+            </div>
+
+            {/* Button Section (Error - Static UI) */}
+            <div className="flex-shrink-0 ml-0.4 min-[430px]:mb-0.5 min-[430px]:ml-1 md:mb-0">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex h-[25px] w-[125px] min-[430px]:w-[135px] items-center justify-center rounded-full text-xs md:text-2xl font-bold uppercase text-white transition hover:brightness-110 md:h-[72px] md:w-[370px]"
+                style={{
+                  background: 'linear-gradient(180deg, #00B1FF 0%, #007AFF 100%)',
+                  boxShadow: 'inset 0px 2px 6px rgba(255, 255, 255, 0.4), 0px 4px 10px rgba(0, 0, 0, 0.4)',
+                  textShadow: '0px 2px 2px rgba(0, 0, 0, 0.5)',
+                }}
+                aria-label="Xác nhận"
+              >
+                Xác nhận
+              </button>
             </div>
           </div>
-
-          {/* Button Section */}
-          <div className="flex-shrink-0 ml-0.4 min-[430px]:mb-0.5 min-[430px]:ml-1 md:mb-0">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex h-[25px] w-[125px] min-[430px]:w-[135px] items-center justify-center rounded-full text-xs md:text-2xl font-bold uppercase text-white transition hover:brightness-110 md:h-[72px] md:w-[370px] md:text-2xl"
-              style={{
-                background: 'linear-gradient(180deg, #00B1FF 0%, #007AFF 100%)',
-                boxShadow: 'inset 0px 2px 6px rgba(255, 255, 255, 0.4), 0px 4px 10px rgba(0, 0, 0, 0.4)',
-                textShadow: '0px 2px 2px rgba(0, 0, 0, 0.5)',
-              }}
-              aria-label="Xác nhận"
-            >
-              Xác nhận
-            </button>
-          </div>
-        </div>
+        )}
       </div>
       {/* </div> */}
     </div>,

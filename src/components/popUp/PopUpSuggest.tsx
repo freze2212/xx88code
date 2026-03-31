@@ -53,13 +53,13 @@ export default function PopUpSuggest({
       aria-modal="true"
       aria-label={title}
     >
-      <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300" 
-        onClick={onClose} 
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
+        onClick={onClose}
       />
 
       {/* Card */}
-      <div className="relative z-10 w-[95%] md:w-[60vw]">
+      <div className="relative z-10 w-[95%] -translate-x-4 md:translate-x-0 md:w-[60vw]">
         <Image
           src="/images/body/background-modal.png"
           alt="Popup Background"
@@ -96,9 +96,8 @@ export default function PopUpSuggest({
           {/* Text Section */}
           <div className="flex flex-grow items-center justify-center px-6 text-center md:px-12 md:-mt-10">
             <div
-              className={`text-lg font-bold leading-tight md:text-3xl lg:text-3xl ${
-                isError ? 'text-[#070E23]' : 'text-[#070E23]'
-              }`}
+              className={`text-lg font-bold leading-tight md:text-3xl lg:text-3xl ${isError ? 'text-[#070E23]' : 'text-[#070E23]'
+                }`}
               style={!isError ? {
                 textTransform: 'uppercase',
               } : {}}
