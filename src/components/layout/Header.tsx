@@ -26,7 +26,7 @@ const Header = () => {
           </Link>
           {/* Home Button */}
           <Link
-            href="https://xx88mega.com/"
+            href="https://www.xx88live.me/"
             className="flex items-center"
           >
             <img
@@ -66,7 +66,7 @@ const Header = () => {
           {/* RIGHT: Home Button */}
           <div className="flex items-center justify-end min-w-[140px] md:min-w-[200px]">
             <Link
-              href="https://xx88mega.com/"
+              href="https://www.xx88live.me/"
               className="hover:brightness-110 active:scale-95 transition-all"
             >
               <img
