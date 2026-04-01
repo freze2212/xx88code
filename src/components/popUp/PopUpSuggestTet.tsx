@@ -61,7 +61,7 @@ export default function PopUpSuggestTet({
       {/* Card */}
       <div className={`relative z-10 w-[100%] max-w-[500px] scale-[1.1] ${isError ? '-translate-x-4' : ''} md:translate-x-0 md:scale-100 md:w-[60vw] md:max-w-none transition-transform duration-300 md:-translate-y-10`}>
         <Image
-          src={isError ? "/images/body/background-modal.png" : "/images/body/modal.gif"}
+          src={isError ? "/images/body/background-modal.png" : "/images/body/modal-main.gif"}
           alt="Popup Background"
           width={1000}
           height={600}
