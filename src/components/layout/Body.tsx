@@ -1,7 +1,10 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { Turnstile } from '@marsidev/react-turnstile';
+// import PopUpSuggest from '../popUp/PopUpSuggest';
+import Link from 'next/link';
 import PopUpSuggestTet from '../popUp/PopUpSuggestTet';
 import Header from './Header';
 // import SnowEffect from '../ui/SnowEffect';
@@ -14,6 +17,7 @@ export function Body() {
   const [captchaError, setCaptchaError] = useState('');
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [serverMsg, setServerMsg] = useState<string | null>(null);
 
   const [captchaKey, setCaptchaKey] = useState(0);
 
@@ -28,6 +32,7 @@ export function Body() {
 
   const siteKey =
     (process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY as string) || '';
+  const apiUrl = (process.env.NEXT_PUBLIC_URL as string) || '';
 
   const resetCaptcha = (msg?: string) => {
     setCaptchaKey((k) => k + 1);
@@ -35,32 +40,13 @@ export function Body() {
     if (msg) setCaptchaError(msg);
   };
 
-  const formatVnd = (amount: number) =>
-    `${amount.toLocaleString('vi-VN')}đ`;
-
-  /** Mốc nghìn: 38, 68, 88, 138, 168, 188, …, 838, 868, 888 → số tiền = mốc × 1.000 */
-  const buildRewardKList = () => {
-    const list: number[] = [38, 68, 88];
-    for (let h = 1; h <= 8; h += 1) {
-      list.push(h * 100 + 38, h * 100 + 68, h * 100 + 88);
-    }
-    return list;
-  };
-
-  const REWARD_K_LIST = buildRewardKList();
-
-  const getRandomReward = () => {
-    const k =
-      REWARD_K_LIST[Math.floor(Math.random() * REWARD_K_LIST.length)] ?? 88;
-    return k * 1000;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     setCodeError('');
     setAccountError('');
     setCaptchaError('');
+    setServerMsg(null);
 
     let hasLocalError = false;
     if (!code.trim()) {
@@ -77,17 +63,52 @@ export function Body() {
     }
 
     if (hasLocalError) {
+      if (captchaToken) resetCaptcha('Vui lòng xác minh Captcha lại');
       return;
     }
 
-    setLoading(true);
-    const reward = getRandomReward();
-    const successMessage = `Chúc mừng! Bạn nhận được ${formatVnd(reward)}.`;
-    setPopupMsg(successMessage);
-    setPopupVariant('success');
-    setPopupOpen(true);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const res = await fetch(`${apiUrl}/codes/use-code-public`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          username: account.trim().toLowerCase(),
+          code: code.trim(),
+          captchaToken: captchaToken,
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const apiError = data?.message || data?.error || 'Có lỗi xảy ra';
+        setServerMsg(apiError);
+        setPopupMsg(apiError);
+        setPopupVariant('error');
+        setPopupOpen(true);
+        resetCaptcha('Vui lòng xác minh Captcha lại');
+        return;
+      }
+
+      const points = data?.data?.pointsAdded || 0;
+      const successMessage = `Đã sử dụng code thành công! Đã cộng ${points} điểm`;
+
+      setServerMsg(successMessage);
+      setPopupMsg(successMessage);
+      setPopupVariant('success');
+      setPopupOpen(true);
+    } catch {
+      setServerMsg('Không thể kết nối máy chủ');
+      resetCaptcha('Vui lòng xác minh Captcha lại');
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const hasError = !!(codeError || accountError || captchaError || serverMsg);
 
   return (
     <>
@@ -228,12 +249,6 @@ export function Body() {
                           // options={{ size: 'normal' }}
                         />
                       </div>
-                    )}
-
-                    {!siteKey && (
-                      <p className="-mt-4 text-sm text-white md:mt-0 md:text-base">
-                        Thiếu cấu hình Captcha (Site key).
-                      </p>
                     )}
 
                     {captchaError && (
