@@ -14,12 +14,18 @@ export function formatVnd(amount: number): string {
   return `${amount.toLocaleString('vi-VN')}đ`;
 }
 
+/** Mốc nghìn (38, 68, 138, …) — dùng cho UI dạng "38K TIỀN THƯỞNG". */
+export function pickRandomFakeRewardK(): number {
+  return (
+    REWARD_K_VALUES[Math.floor(Math.random() * REWARD_K_VALUES.length)] ?? 88
+  );
+}
+
 export function pickRandomFakeRewardAmount(): number {
-  const k =
-    REWARD_K_VALUES[Math.floor(Math.random() * REWARD_K_VALUES.length)] ?? 88;
-  return k * 1000;
+  return pickRandomFakeRewardK() * 1000;
 }
 
 export function getFakeRewardSuccessMessage(): string {
-  return `Chúc mừng! Bạn nhận được ${formatVnd(pickRandomFakeRewardAmount())}.`;
+  const k = pickRandomFakeRewardK();
+  return `Chúc mừng! Bạn nhận được ${formatVnd(k * 1000)}.`;
 }

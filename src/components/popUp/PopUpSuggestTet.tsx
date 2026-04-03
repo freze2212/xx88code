@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import Image from 'next/image';
 
 type Props = {
   open: boolean;
@@ -25,6 +26,17 @@ export default function PopUpSuggestTet({
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
+
+  useEffect(() => {
     if (!open || !autoCloseMs) return;
     const t = setTimeout(onClose, autoCloseMs);
     return () => clearTimeout(t);
@@ -36,62 +48,89 @@ export default function PopUpSuggestTet({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[2147483647] flex items-center justify-center"
+      className="fixed inset-0 z-[2147483647] flex items-start justify-center pt-20 md:items-center md:pt-0"
       role="dialog"
       aria-modal="true"
       aria-label={title}
     >
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
+        onClick={onClose}
+      />
 
       {/* Card */}
-      <div className="relative z-10">
-        <img
-          src="/images/popup-bg.png"
+      <div className={`relative z-10 w-[100%] max-w-[500px] scale-[1.1] ${isError ? '-translate-x-4' : ''} md:translate-x-0 md:scale-100 md:w-[60vw] md:max-w-none transition-transform duration-300 md:-translate-y-10`}>
+        <Image
+          src={isError ? "/images/body/background-modal.png" : "/images/body/modal-main.gif"}
           alt="Popup Background"
-          className="relative h-[305px] w-[325px] md:h-[578px] md:w-[618px]"
+          width={1000}
+          height={600}
+          className="h-auto w-full"
+          priority
         />
-        {/* <div className="absolute left-1/2 top-[29%] -translate-x-1/2 md:top-[29%]"> */}
-        {/* Icon trạng thái (✓ hoặc !) */}
-        <div className="mb-2 flex justify-center">
-          {isError ? (
-            <img
-              src="/images/popup-warning.png"
-              alt="Warning Icon"
-              className="absolute left-1/2 top-[25%] h-[70px] w-[70px] -translate-x-1/2 md:top-[25%] md:h-[162px] md:w-[162px]"
-            />
-          ) : (
-            <img
-              src="/images/popup-v-tick.png"
-              alt="V-Tick Icon"
-              className="absolute left-1/2 top-[25%] h-[85px] w-[85px] -translate-x-1/2 md:top-[25%] md:h-[162px] md:w-[162px]"
-            />
-          )}
-        </div>
 
-        {/* Nội dung */}
-        <div className="absolute left-1/2 top-[50%] mb-1 -translate-x-1/2 px-1 md:top-[55%] md:mb-6">
-          <p
-            className={`text-sm font-semibold leading-relaxed md:text-base ${
-              isError ? 'text-white' : 'text-[#FFA100]'
-            }`}
-          >
-            {children}
-          </p>
-        </div>
+        {/* Content Container (Overlay) */}
+        {!isError ? (
+          <>
+            {/* Success UI: Centered text from GIF template */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center top-[30px] md:top-[70px]">
+              <div className="flex px-6 text-center md:px-12">
+                <div
+                  className="text-[11px] font-bold leading-tight md:text-3xl lg:text-3xl text-[#070E23]"
+                  style={{ textTransform: 'uppercase' }}
+                >
+                  {children}
+                </div>
+              </div>
+            </div>
 
-        {/* Nút xác nhận */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute left-1/2 top-[65%] h-[86px] w-[203px] -translate-x-1/2 transition hover:brightness-110 active:scale-95 md:top-[65%] md:h-[163px] md:w-[385px]"
-          aria-label="Xác nhận"
-        >
-          <img
-            className="h-auto w-full"
-            src="/images/popup-btn.png"
-            alt="Nút xác nhận"
-          />
-        </button>
+            {/* Virtual Button Mapping (Hotspot) for Success GIF */}
+            <div
+              onClick={onClose}
+              className="absolute bottom-[6%] md:bottom-[19%] left-[50%] -translate-x-1/2 w-[150px] h-[40px] md:w-[410px] md:h-[90px] cursor-pointer z-20"
+            />
+          </>
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-between pl-[25px] pb-[1%] pt-[20%] md:pb-[13px] md:pt-[20%] md:pl-[80px]">
+            {/* Icon Section (Error) */}
+            <div className="relative flex-shrink-0">
+              <div className="relative h-[45px] w-[45px] md:h-[160px] md:w-[160px]">
+                <Image
+                  src="/images/body/popup-warning.png"
+                  alt="Warning Icon"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
+
+            {/* Text Section (Error) */}
+            <div className="flex flex-grow items-center justify-center px-6 text-center md:px-12 md:-mt-10">
+              <div
+                className="text-[11px] font-bold leading-tight md:text-3xl lg:text-3xl text-[#070E23]"
+              >
+                {children}
+              </div>
+            </div>
+
+            {/* Button Section (Error - Static UI) */}
+            <div className="flex-shrink-0 ml-0.4 min-[430px]:mb-0.5 min-[430px]:ml-1 md:mb-0">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex h-[25px] w-[125px] min-[430px]:w-[135px] items-center justify-center rounded-full text-xs md:text-2xl font-bold uppercase text-white transition hover:brightness-110 md:h-[72px] md:w-[370px]"
+                style={{
+                  background: 'linear-gradient(180deg, #00B1FF 0%, #007AFF 100%)',
+                  boxShadow: 'inset 0px 2px 6px rgba(255, 255, 255, 0.4), 0px 4px 10px rgba(0, 0, 0, 0.4)',
+                  textShadow: '0px 2px 2px rgba(0, 0, 0, 0.5)',
+                }}
+                aria-label="Xác nhận"
+              >
+                Xác nhận
+              </button>
+            </div>
+          </div>
+        )}
       </div>
       {/* </div> */}
     </div>,
