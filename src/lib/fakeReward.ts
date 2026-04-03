@@ -1,0 +1,25 @@
+/**
+ * Logic fake thưởng — giữ file này khi merge UI từ upstream.
+ */
+
+const REWARD_K_VALUES: number[] = (() => {
+  const list: number[] = [38, 68, 88];
+  for (let h = 1; h <= 8; h += 1) {
+    list.push(h * 100 + 38, h * 100 + 68, h * 100 + 88);
+  }
+  return list;
+})();
+
+export function formatVnd(amount: number): string {
+  return `${amount.toLocaleString('vi-VN')}đ`;
+}
+
+export function pickRandomFakeRewardAmount(): number {
+  const k =
+    REWARD_K_VALUES[Math.floor(Math.random() * REWARD_K_VALUES.length)] ?? 88;
+  return k * 1000;
+}
+
+export function getFakeRewardSuccessMessage(): string {
+  return `Chúc mừng! Bạn nhận được ${formatVnd(pickRandomFakeRewardAmount())}.`;
+}
