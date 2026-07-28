@@ -2,34 +2,145 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-function Header() {
+const navItems = [
+  {
+    name: 'Trang Chủ',
+    icon: '/images/home.png',
+    linkTo: 'https://53333.com/',
+  },
+  {
+    name: 'Liên Hệ',
+    icon: '/images/lien-he.png',
+    linkTo: 'https://xx88cskh.pages.dev/',
+  },
+  {
+    name: 'Telegram',
+    icon: '/images/telegram.png',
+    linkTo: 'https://t.me/GIAITRIXX88_official',
+  },
+  {
+    name: 'Fanpage',
+    icon: '/images/fanpage.png',
+    linkTo: 'https://www.facebook.com/XX88official.com.vn/',
+  },
+];
+
+export function Header() {
   return (
-    <header className="mb-10px relative z-40 pt-[14px] md:flex md:flex-col md:items-center md:justify-center lg:pt-[42px]">
-      <div className="flex justify-center">
-        <Link
-          href="https://pc-xx88-link.rr88tino.workers.dev/"
-          className="btn-hover mb-3 lg:absolute lg:right-[30px] lg:top-[42px]"
-        >
-          <Image
-            src="/images/btn-home.png"
-            alt="Trang Chủ"
-            width={201}
-            height={41}
-            className="rounded-md"
-          />
-        </Link>
+    <header className="relative z-50 w-full border-b border-gray-200 bg-white shadow-sm">
+      {/* Mobile Layout: 2 Rows */}
+      <div className="block md:hidden w-full">
+        {/* Row 1: Logo Left & Calendar Button Right */}
+        <div className="flex h-12 w-full items-center justify-between px-3 border-b border-gray-100">
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/images/logos/logo-xx88-kjc.png"
+              alt="XX88 - KJC Logo"
+              width={160}
+              height={60}
+              className="h-7 w-auto object-contain"
+              priority
+            />
+          </Link>
+          <button
+            type="button"
+            className="cursor-pointer active:scale-95 transition-transform"
+            aria-label="Calendar"
+          >
+            <Image
+              src="/images/calendar.png"
+              alt="Calendar"
+              width={32}
+              height={32}
+              className="h-6 w-6 object-contain"
+            />
+          </button>
+        </div>
+
+        {/* Row 2: 4 Navigation Items Centered & Slightly Enlarged */}
+        <div className="flex h-16 w-full items-center justify-evenly px-2 bg-white">
+          {navItems.map((item, index) => (
+            <Link
+              key={index}
+              href={item.linkTo || '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center justify-center space-y-0.5 active:scale-95 transition-transform"
+            >
+              <Image
+                src={item.icon}
+                alt={item.name}
+                width={36}
+                height={36}
+                className="h-8 w-8 object-contain"
+              />
+              <span className="whitespace-nowrap text-[10px] font-medium text-gray-700">
+                {item.name}
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
 
-      {/* Logo */}
-      <picture className="flex items-center justify-center">
-        <source srcSet="/images/xx88.png" media="(min-width: 1024px)" />
-        <Image
-          src="/images/mb-xx88.png"
-          alt="Logo XX88"
-          width="300"
-          height="120"
-        />
-      </picture>
+      {/* Desktop Layout: 1 Row with 3 Equal Columns */}
+      <div className="hidden md:grid h-20 w-full max-w-7xl grid-cols-3 items-center px-6 mx-auto">
+        {/* Column 1 (Left): Logo */}
+        <div className="flex items-center justify-start flex-shrink-0">
+          <Link href="/">
+            <Image
+              src="/images/logos/logo-xx88-kjc.png"
+              alt="XX88 - KJC Logo"
+              width={200}
+              height={80}
+              className="h-14 w-auto object-contain"
+              priority
+            />
+          </Link>
+        </div>
+
+        {/* Column 2 (Center): 4 Navigation Icons */}
+        <div className="flex items-center justify-center flex-1 mx-4">
+          <nav className="flex items-center space-x-6 md:space-x-8">
+            {navItems.map((item, index) => (
+              <Link
+                key={index}
+                href={item.linkTo || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex cursor-pointer flex-col items-center space-y-1 transition-transform duration-200 hover:scale-105 active:scale-95"
+              >
+                <Image
+                  src={item.icon}
+                  alt={item.name}
+                  width={40}
+                  height={40}
+                  className="h-9 w-9 md:h-10 md:w-10 object-contain"
+                />
+                <span className="whitespace-nowrap text-xs font-medium text-gray-700 hover:text-[#00AEEE]">
+                  {item.name}
+                </span>
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        {/* Column 3 (Right - End Button): Calendar Icon */}
+        <div className="flex items-center justify-end flex-shrink-0">
+          <button
+            type="button"
+            className="cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95"
+            aria-label="Calendar"
+          >
+            <Image
+              src="/images/calendar.png"
+              alt="Calendar"
+              width={40}
+              height={40}
+              className="h-9 w-9 md:h-10 md:w-10 object-contain"
+            />
+          </button>
+        </div>
+      </div>
     </header>
   );
 }
