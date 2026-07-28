@@ -27,18 +27,18 @@ const navItems = [
 
 export function Header() {
   return (
-    <header className="relative z-50 w-full border-b border-gray-200 bg-white shadow-sm">
+    <header className="absolute top-0 inset-x-0 z-50 md:relative w-full border-b border-gray-200 bg-white shadow-sm">
       {/* Mobile Layout: 2 Rows */}
       <div className="block md:hidden w-full">
         {/* Row 1: Logo Left & Calendar Button Right */}
-        <div className="flex h-12 w-full items-center justify-between px-3 border-b border-gray-100">
+        <div className="flex h-11 w-full items-center justify-between px-3">
           <Link href="/" className="flex items-center">
             <Image
               src="/images/logos/logo-xx88-kjc.png"
               alt="XX88 - KJC Logo"
-              width={160}
-              height={60}
-              className="h-7 w-auto object-contain"
+              width={116}
+              height={34}
+              className="w-[116px] h-[34px] object-contain"
               priority
             />
           </Link>
@@ -50,31 +50,31 @@ export function Header() {
             <Image
               src="/images/calendar.png"
               alt="Calendar"
-              width={32}
-              height={32}
+              width={26}
+              height={26}
               className="h-6 w-6 object-contain"
             />
           </button>
         </div>
 
-        {/* Row 2: 4 Navigation Items Centered & Slightly Enlarged */}
-        <div className="flex h-16 w-full items-center justify-evenly px-2 bg-white">
+        {/* Row 2: 4 Navigation Items Centered (52x52px Icons & Increased Height) */}
+        <div className="flex h-[100px] w-full items-center justify-evenly px-2 bg-white">
           {navItems.map((item, index) => (
             <Link
               key={index}
               href={item.linkTo || '#'}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex flex-col items-center justify-center space-y-0.5 active:scale-95 transition-transform"
+              className="flex flex-col items-center justify-center space-y-1 active:scale-95 transition-transform"
             >
               <Image
                 src={item.icon}
                 alt={item.name}
-                width={36}
-                height={36}
-                className="h-8 w-8 object-contain"
+                width={52}
+                height={52}
+                className="w-[52px] h-[52px] object-contain"
               />
-              <span className="whitespace-nowrap text-[10px] font-medium text-gray-700">
+              <span className="whitespace-nowrap text-xs font-bold text-gray-800">
                 {item.name}
               </span>
             </Link>
