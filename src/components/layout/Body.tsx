@@ -128,7 +128,7 @@ export function Body() {
 
           {/* Main Content Container inside Body */}
           <main className="relative z-10 flex flex-1 w-full flex-col lg:flex-row items-center justify-center px-3 pt-36 sm:pt-40 md:pt-28 pb-8 sm:pb-12 md:pb-16">
-            
+
             {/* Modal Frame Container */}
             <div className="relative mx-auto flex flex-col items-center justify-center w-full max-w-[350px] sm:max-w-[480px] md:max-w-[760px]">
               <div className="relative flex w-full items-center justify-center">
@@ -191,9 +191,8 @@ export function Body() {
                               setAccountError('');
                             }}
                             placeholder="Nhập tài khoản"
-                            className={`h-[29px] sm:h-[32px] md:h-[50px] w-full rounded-[6px] sm:rounded-[8px] md:rounded-[18px] bg-gradient-to-b from-[#F0F8FF] to-[#E1F3FE] pl-8 sm:pl-9 md:pl-13 pr-3 md:pr-4 text-left text-xs md:text-lg font-semibold text-[#0F4C75] placeholder-[#4C9FD6] shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] border-2 ${
-                              accountError ? 'border-red-400' : 'border-white/80'
-                            } focus:border-[#00AEEE] focus:outline-none`}
+                            className={`h-[29px] sm:h-[32px] md:h-[50px] w-full rounded-[6px] sm:rounded-[8px] md:rounded-[18px] bg-gradient-to-b from-[#F0F8FF] to-[#E1F3FE] pl-8 sm:pl-9 md:pl-13 pr-3 md:pr-4 text-left text-xs md:text-lg font-semibold text-[#0F4C75] placeholder-[#4C9FD6] shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] border-2 ${accountError ? 'border-red-400' : 'border-white/80'
+                              } focus:border-[#00AEEE] focus:outline-none`}
                             autoComplete="username"
                           />
                         </div>
@@ -220,9 +219,8 @@ export function Body() {
                               setCodeError('');
                             }}
                             placeholder="Mã code"
-                            className={`h-[29px] sm:h-[32px] md:h-[50px] w-full rounded-[6px] sm:rounded-[8px] md:rounded-[18px] bg-gradient-to-b from-[#F0F8FF] to-[#E1F3FE] pl-8 sm:pl-9 md:pl-13 pr-3 md:pr-4 text-left text-xs md:text-lg font-semibold text-[#0F4C75] placeholder-[#4C9FD6] shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] border-2 ${
-                              codeError ? 'border-red-400' : 'border-white/80'
-                            } focus:border-[#00AEEE] focus:outline-none`}
+                            className={`h-[29px] sm:h-[32px] md:h-[50px] w-full rounded-[6px] sm:rounded-[8px] md:rounded-[18px] bg-gradient-to-b from-[#F0F8FF] to-[#E1F3FE] pl-8 sm:pl-9 md:pl-13 pr-3 md:pr-4 text-left text-xs md:text-lg font-semibold text-[#0F4C75] placeholder-[#4C9FD6] shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] border-2 ${codeError ? 'border-red-400' : 'border-white/80'
+                              } focus:border-[#00AEEE] focus:outline-none`}
                             autoComplete="one-time-code"
                           />
                         </div>
@@ -290,7 +288,7 @@ export function Body() {
             </div>
 
             {/* btn-introduce.png (PC: Placed on right side of screen at right-4; Mobile: Below modal frame) */}
-            <div className="mt-6 lg:mt-0 lg:absolute lg:right-4 lg:top-1/2 lg:-translate-y-1/2 flex justify-center z-30">
+            <div className="mt-6 lg:mt-0 lg:absolute lg:right-8 lg:top-[40%] lg:-translate-y-1/2 flex justify-center z-30">
               <Link
                 href="https://xx88cskh.pages.dev/"
                 target="_blank"
