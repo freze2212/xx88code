@@ -18,7 +18,7 @@ export function Sidebar() {
       name: 'Fanpage',
       icon: '/images/fanpage.png',
       bgColor: 'bg-blue-600',
-      linkTo: 'https://www.facebook.com/XX88official.com.vn/',
+      linkTo: 'https://www.facebook.com/XX88OfficialVN',
     },
     {
       name: 'Trang Chủ',

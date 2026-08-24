@@ -21,7 +21,7 @@ const navItems = [
   {
     name: 'Fanpage',
     icon: '/images/fanpage.png',
-    linkTo: 'https://www.facebook.com/XX88official.com.vn/',
+    linkTo: 'https://www.facebook.com/XX88OfficialVN',
   },
 ];
 
