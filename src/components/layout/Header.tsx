@@ -30,11 +30,11 @@ export function Header() {
     <header className="absolute top-0 inset-x-0 z-50 md:relative w-full border-b border-gray-200 bg-white shadow-sm">
       {/* Mobile Layout: 2 Rows */}
       <div className="block md:hidden w-full">
-        {/* Row 1: Logo Left & Calendar Button Right */}
-        <div className="flex h-11 w-full items-center justify-between px-3">
+        {/* Row 1: Logo Centered & Calendar Button Right */}
+        <div className="relative flex h-11 w-full items-center justify-center px-3">
           <Link href="/" className="flex items-center">
             <Image
-              src="/images/logos/logo-xx88-kjc.png"
+              src="/images/mainlogoxx88.png"
               alt="XX88 - KJC Logo"
               width={116}
               height={34}
@@ -44,7 +44,7 @@ export function Header() {
           </Link>
           <button
             type="button"
-            className="cursor-pointer active:scale-95 transition-transform"
+            className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer active:scale-95 transition-transform"
             aria-label="Calendar"
           >
             <Image
@@ -88,7 +88,7 @@ export function Header() {
         <div className="flex items-center justify-start flex-shrink-0">
           <Link href="/">
             <Image
-              src="/images/logos/logo-xx88-kjc.png"
+              src="/images/mainlogoxx88.png"
               alt="XX88 - KJC Logo"
               width={200}
               height={80}
