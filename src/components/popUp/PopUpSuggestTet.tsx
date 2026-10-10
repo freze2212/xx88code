@@ -2,14 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import Image from 'next/image';
 
 type Props = {
   open: boolean;
   onClose: () => void;
   title?: string;
   autoCloseMs?: number;
-  // 'success' = dấu tích, 'error' = dấu chấm than
+  // 'success' = dấu tích, 'error' = dấu chấm than / thất bại
   variant?: 'success' | 'error';
   children?: React.ReactNode;
 };
@@ -26,17 +25,6 @@ export default function PopUpSuggestTet({
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [open]);
-
-  useEffect(() => {
     if (!open || !autoCloseMs) return;
     const t = setTimeout(onClose, autoCloseMs);
     return () => clearTimeout(t);
@@ -48,91 +36,90 @@ export default function PopUpSuggestTet({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[2147483647] flex items-start justify-center pt-20 md:items-center md:pt-0"
+      className="fixed inset-0 z-[2147483647] flex items-center justify-center p-3 sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-label={title}
     >
+      {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
+        className="absolute inset-0 bg-black/65 backdrop-blur-xs transition-opacity"
         onClick={onClose}
       />
 
-      {/* Card */}
-      <div className={`relative z-10 w-[100%] max-w-[500px] scale-[1.1] ${isError ? '-translate-x-4' : ''} md:translate-x-0 md:scale-100 md:w-[60vw] md:max-w-none transition-transform duration-300 md:-translate-y-10`}>
-        <Image
-          src={isError ? "/images/body/background-modal.png" : "/images/body/modal-main.gif"}
+      {/* Card Popup Aquarium */}
+      <div className="relative z-10 flex w-[330px] h-[317px] sm:w-[450px] sm:h-[432px] md:w-[560px] md:h-[538px] items-center justify-center select-none">
+        {/* Background Image (Shark Frame) */}
+        <img
+          src="/images/ui-aquarium/bg-popup.png"
           alt="Popup Background"
-          width={1000}
-          height={600}
-          className="h-auto w-full"
-          priority
+          className="absolute inset-0 h-full w-full object-contain filter drop-shadow-2xl"
         />
 
-        {/* Content Container (Overlay) */}
-        {!isError ? (
-          <>
-            {/* Success UI: Centered text from GIF template */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center top-[30px] md:top-[70px]">
-              <div className="flex px-6 text-center md:px-12">
-                <div
-                  className="text-[11px] font-bold leading-tight md:text-3xl lg:text-3xl text-[#070E23]"
-                  style={{ textTransform: 'uppercase' }}
-                >
-                  {children}
-                </div>
-              </div>
-            </div>
+        {/* Close Button X (Top-Right) */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-[6.5%] right-[6.5%] sm:top-[7%] sm:right-[7%] z-20 flex h-7 w-7 sm:h-9 sm:w-9 md:h-10 md:w-10 items-center justify-center rounded-full bg-white/10 hover:bg-white/30 active:scale-90 transition-all"
+          aria-label="Đóng"
+        >
+          <span className="sr-only">Close</span>
+        </button>
 
-            {/* Virtual Button Mapping (Hotspot) for Success GIF */}
-            <div
-              onClick={onClose}
-              className="absolute bottom-[6%] md:bottom-[19%] left-[50%] -translate-x-1/2 w-[150px] h-[40px] md:w-[410px] md:h-[90px] cursor-pointer z-20"
+        {/* Popup Inner Content Container (Pushed down ~20% lower, evenly spaced and centered vertically) */}
+        <div className="absolute top-[28%] sm:top-[30%] md:top-[31%] bottom-[21%] sm:bottom-[22%] md:bottom-[23%] inset-x-[8%] flex flex-col items-center justify-center space-y-2 sm:space-y-3 md:space-y-3.5 text-center z-10">
+          
+          {/* 1. Header Title Image: text-nhapcode.png */}
+          <div className="flex justify-center w-full">
+            <img
+              src="/images/ui-aquarium/text-nhapcode.png"
+              alt="NHẬP MÃ CODE"
+              className="h-auto w-[115px] sm:w-[150px] md:w-[185px] object-contain filter drop-shadow-md"
             />
-          </>
-        ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-between pl-[25px] pb-[1%] pt-[20%] md:pb-[13px] md:pt-[20%] md:pl-[80px]">
-            {/* Icon Section (Error) */}
-            <div className="relative flex-shrink-0">
-              <div className="relative h-[45px] w-[45px] md:h-[160px] md:w-[160px]">
-                <Image
-                  src="/images/body/popup-warning.png"
-                  alt="Warning Icon"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            </div>
+          </div>
 
-            {/* Text Section (Error) */}
-            <div className="flex flex-grow items-center justify-center px-6 text-center md:px-12 md:-mt-10">
-              <div
-                className="text-[11px] font-bold leading-tight md:text-3xl lg:text-3xl text-[#070E23]"
-              >
-                {children}
-              </div>
-            </div>
+          {/* 2. Subtitle Image: text-done.png / text-retry.png */}
+          <div className="flex justify-center w-full">
+            <img
+              src={isError ? '/images/ui-aquarium/text-retry.png' : '/images/ui-aquarium/text-done.png'}
+              alt={isError ? 'THẤT BẠI!' : 'THÀNH CÔNG!'}
+              className="h-auto w-[100px] sm:w-[135px] md:w-[165px] object-contain filter drop-shadow-md"
+            />
+          </div>
 
-            {/* Button Section (Error - Static UI) */}
-            <div className="flex-shrink-0 ml-0.4 min-[430px]:mb-0.5 min-[430px]:ml-1 md:mb-0">
-              <button
-                type="button"
-                onClick={onClose}
-                className="flex h-[25px] w-[125px] min-[430px]:w-[135px] items-center justify-center rounded-full text-xs md:text-2xl font-bold uppercase text-white transition hover:brightness-110 md:h-[72px] md:w-[370px]"
-                style={{
-                  background: 'linear-gradient(180deg, #00B1FF 0%, #007AFF 100%)',
-                  boxShadow: 'inset 0px 2px 6px rgba(255, 255, 255, 0.4), 0px 4px 10px rgba(0, 0, 0, 0.4)',
-                  textShadow: '0px 2px 2px rgba(0, 0, 0, 0.5)',
-                }}
-                aria-label="Xác nhận"
-              >
-                Xác nhận
-              </button>
+          {/* 3. Status Icon: icon-done.png / icon-failed.png */}
+          <div className="flex items-center justify-center w-full">
+            <img
+              src={isError ? '/images/ui-aquarium/icon-failed.png' : '/images/ui-aquarium/icon-done.png'}
+              alt={isError ? 'Icon Thất bại' : 'Icon Thành công'}
+              className="h-auto w-[90px] sm:w-[122px] md:w-[150px] object-contain filter drop-shadow-lg"
+            />
+          </div>
+
+          {/* 4. Message Text Content */}
+          <div className="w-full px-2">
+            <div className="text-xs sm:text-sm md:text-base font-bold text-[#FFE875] drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] leading-tight">
+              {children}
             </div>
           </div>
-        )}
+        </div>
+
+        {/* Action Button at Bottom (XÁC NHẬN / THỬ LẠI) */}
+        <div className="absolute bottom-[6.5%] sm:bottom-[7%] left-1/2 -translate-x-1/2 z-20">
+          <button
+            type="button"
+            onClick={onClose}
+            className="transition-transform duration-200 hover:scale-105 active:scale-95 cursor-pointer block"
+            aria-label={isError ? 'Thử lại' : 'Xác nhận'}
+          >
+            <img
+              src={isError ? '/images/ui-aquarium/btn-retry.png' : '/images/ui-aquarium/btn-accept.png'}
+              alt={isError ? 'Nút Thử lại' : 'Nút Xác nhận'}
+              className="h-auto w-[130px] sm:w-[175px] md:w-[215px] object-contain filter drop-shadow-lg"
+            />
+          </button>
+        </div>
       </div>
-      {/* </div> */}
     </div>,
     document.body
   );

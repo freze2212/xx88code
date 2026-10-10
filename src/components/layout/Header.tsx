@@ -1,86 +1,148 @@
-/* eslint-disable @next/next/no-img-element */
-"use client";
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
 
-import Link from "next/link";
+const navItems = [
+  {
+    name: 'Trang Chủ',
+    icon: '/images/home.png',
+    linkTo: 'https://53333.com/',
+  },
+  {
+    name: 'Liên Hệ',
+    icon: '/images/lien-he.png',
+    linkTo: 'https://xx88cskh.pages.dev/',
+  },
+  {
+    name: 'Telegram',
+    icon: '/images/telegram.png',
+    linkTo: 'https://t.me/GIAITRIXX88_official',
+  },
+  {
+    name: 'Fanpage',
+    icon: '/images/fanpage.png',
+    linkTo: 'https://www.facebook.com/XX88OfficialVN',
+  },
+];
 
-const Header = () => {
+export function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-sm border-b border-[#FFFFFF38] h-[57px] md:h-[80px] flex items-center header-bg">
-      <div className="container mx-auto px-2 py-2 md:px-4 md:py-3">
-        {/* MOBILE VERSION */}
-        <div className="flex lg:hidden items-center justify-between gap-4 w-full">
-          <Link href="https://53333.COM" className="flex items-center gap-2">
-            <img
-              src="/images/header/logo.png"
-              alt="Logo"
-              className="h-[28px] md:h-[30px] w-auto object-contain"
-              draggable={false}
-            />
-            {/* Main Logo GIF */}
-            <img
-              src="/images/header/main-logo.gif"
-              alt="Main Logo"
-              className="h-[30px] md:h-[36px] w-auto object-contain"
-              draggable={false}
+    <header className="absolute top-0 inset-x-0 z-50 md:relative w-full border-b border-gray-200 bg-white shadow-sm">
+      {/* Mobile Layout: 2 Rows */}
+      <div className="block md:hidden w-full">
+        {/* Row 1: Logo Centered & Calendar Button Right */}
+        <div className="relative flex h-11 w-full items-center justify-center px-3">
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/images/mainlogoxx88.png"
+              alt="XX88 - KJC Logo"
+              width={116}
+              height={34}
+              className="w-[116px] h-[34px] object-contain"
+              priority
             />
           </Link>
-          {/* Home Button */}
-          <Link
-            href="https://www.xx88live.me/"
-            className="flex items-center"
+          <button
+            type="button"
+            className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer active:scale-95 transition-transform"
+            aria-label="Calendar"
           >
-            <img
-              src="/images/header/button.png"
-              alt="Home"
-              className="h-[30px] min-[430px]:h-[35px] w-auto object-contain"
+            <Image
+              src="/images/calendar.png"
+              alt="Calendar"
+              width={26}
+              height={26}
+              className="h-6 w-6 object-contain"
+            />
+          </button>
+        </div>
+
+        {/* Row 2: 4 Navigation Items Centered (52x52px Icons & Increased Height) */}
+        <div className="flex h-[100px] w-full items-center justify-evenly px-2 bg-white">
+          {navItems.map((item, index) => (
+            <Link
+              key={index}
+              href={item.linkTo || '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center justify-center space-y-1 active:scale-95 transition-transform"
+            >
+              <Image
+                src={item.icon}
+                alt={item.name}
+                width={52}
+                height={52}
+                className="w-[52px] h-[52px] object-contain"
+              />
+              <span className="whitespace-nowrap text-xs font-bold text-gray-800">
+                {item.name}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop Layout: 1 Row with 3 Equal Columns */}
+      <div className="hidden md:grid h-20 w-full max-w-7xl grid-cols-3 items-center px-6 mx-auto">
+        {/* Column 1 (Left): Logo */}
+        <div className="flex items-center justify-start flex-shrink-0">
+          <Link href="/">
+            <Image
+              src="/images/mainlogoxx88.png"
+              alt="XX88 - KJC Logo"
+              width={200}
+              height={80}
+              className="h-14 w-auto object-contain"
+              priority
             />
           </Link>
         </div>
 
-        {/* DESKTOP VERSION */}
-        <div className="hidden lg:grid grid-cols-[auto_1fr_auto] items-center px-2 md:px-0">
-          {/* LEFT: desktop logos */}
-          <div className="flex items-center gap-2">
-            <Link href="https://XX88A1.COM" className="flex items-center gap-3">
-              <img
-                src="/images/header/logo.png"
-                alt="Logo"
-                className="h-[45px] w-auto object-contain"
-                draggable={false}
-                style={{ transform: "translate(4px , 4px)" }}
-              />
-              {/* Main Logo GIF */}
-              <img
-                src="/images/header/main-logo.gif"
-                alt="Main Logo"
-                className="h-[60px] w-auto object-contain"
-                draggable={false}
-                style={{ transform: "translate(4px , 4px)" }}
-              />
-            </Link>
-          </div>
+        {/* Column 2 (Center): 4 Navigation Icons */}
+        <div className="flex items-center justify-center flex-1 mx-4">
+          <nav className="flex items-center space-x-6 md:space-x-8">
+            {navItems.map((item, index) => (
+              <Link
+                key={index}
+                href={item.linkTo || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex cursor-pointer flex-col items-center space-y-1 transition-transform duration-200 hover:scale-105 active:scale-95"
+              >
+                <Image
+                  src={item.icon}
+                  alt={item.name}
+                  width={40}
+                  height={40}
+                  className="h-9 w-9 md:h-10 md:w-10 object-contain"
+                />
+                <span className="whitespace-nowrap text-xs font-medium text-gray-700 hover:text-[#00AEEE]">
+                  {item.name}
+                </span>
+              </Link>
+            ))}
+          </nav>
+        </div>
 
-          {/* CENTER: empty space */}
-          <div className="flex items-center justify-center"></div>
-
-          {/* RIGHT: Home Button */}
-          <div className="flex items-center justify-end min-w-[140px] md:min-w-[200px]">
-            <Link
-              href="https://www.xx88live.me/"
-              className="hover:brightness-110 active:scale-95 transition-all"
-            >
-              <img
-                src="/images/header/button-main.png"
-                alt="Trang Chủ"
-                className="h-[70px] w-auto object-contain"
-              />
-            </Link>
-          </div>
+        {/* Column 3 (Right - End Button): Calendar Icon */}
+        <div className="flex items-center justify-end flex-shrink-0">
+          <button
+            type="button"
+            className="cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95"
+            aria-label="Calendar"
+          >
+            <Image
+              src="/images/calendar.png"
+              alt="Calendar"
+              width={40}
+              height={40}
+              className="h-9 w-9 md:h-10 md:w-10 object-contain"
+            />
+          </button>
         </div>
       </div>
     </header>
   );
-};
+}
 
 export default Header;
-
