@@ -3,45 +3,68 @@
 import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 import Link from 'next/link';
-import type { AccountPrizeConfig } from '@/lib/prizeConfig';
+import type { AccountPrizeConfig, AdminCredentials } from '@/lib/prizeConfig';
 import {
-  loadAdminPassword,
-  loadAdminUsername,
-  loadPrizeConfigs,
+  AdminAuthError,
+  fetchPrizeConfigs,
   normalizeAccountId,
   savePrizeConfigs,
 } from '@/lib/prizeConfig';
 
 export default function AdminPage() {
-  const [adminUsername] = useState(() => loadAdminUsername());
-  const [adminPassword] = useState(() => loadAdminPassword());
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [configs, setConfigs] = useState<AccountPrizeConfig[]>(() => loadPrizeConfigs());
+  const [credentials, setCredentials] = useState<AdminCredentials | null>(null);
+  const [configs, setConfigs] = useState<AccountPrizeConfig[]>([]);
   const [accountId, setAccountId] = useState('');
   const [amount, setAmount] = useState('');
   const [message, setMessage] = useState('');
   const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [busy, setBusy] = useState(false);
 
   const sortedConfigs = useMemo(() => {
     return [...configs].sort((left, right) => left.accountId.localeCompare(right.accountId));
   }, [configs]);
 
-  const handleLogin = (event: FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (loginUsername.trim() !== adminUsername || loginPassword !== adminPassword) {
-      setMessage('Tài khoản hoặc mật khẩu admin không đúng.');
-      return;
+    const nextCredentials = { username: loginUsername.trim(), password: loginPassword };
+    try {
+      setBusy(true);
+      setConfigs(await fetchPrizeConfigs(nextCredentials));
+      setCredentials(nextCredentials);
+      setLoginUsername('');
+      setLoginPassword('');
+      setMessage('');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Không đăng nhập được.');
+    } finally {
+      setBusy(false);
     }
-
-    setIsAuthenticated(true);
-    setLoginUsername('');
-    setLoginPassword('');
-    setMessage('');
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const persistConfigs = async (nextConfigs: AccountPrizeConfig[], successMessage: string) => {
+    if (!credentials) {
+      return false;
+    }
+
+    try {
+      setBusy(true);
+      setConfigs(await savePrizeConfigs(credentials, nextConfigs));
+      setMessage(successMessage);
+      return true;
+    } catch (error) {
+      if (error instanceof AdminAuthError) {
+        setCredentials(null);
+      }
+      setMessage(error instanceof Error ? error.message : 'Không lưu được cấu hình thưởng.');
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const normalizedAccountId = normalizeAccountId(accountId);
@@ -67,21 +90,19 @@ export default function AdminPage() {
       nextConfigs.push(nextItem);
     }
 
-    savePrizeConfigs(nextConfigs);
-    setConfigs(nextConfigs);
-    setAccountId('');
-    setAmount('');
-    setMessage(`Đã lưu cấu hình cho tài khoản ${normalizedAccountId}.`);
+    const saved = await persistConfigs(nextConfigs, `Đã lưu cấu hình cho tài khoản ${normalizedAccountId}.`);
+    if (saved) {
+      setAccountId('');
+      setAmount('');
+    }
   };
 
-  const handleDelete = (targetAccountId: string) => {
+  const handleDelete = async (targetAccountId: string) => {
     const nextConfigs = configs.filter((item) => item.accountId !== targetAccountId);
-    savePrizeConfigs(nextConfigs);
-    setConfigs(nextConfigs);
-    setMessage(`Đã xóa cấu hình của tài khoản ${targetAccountId}.`);
+    await persistConfigs(nextConfigs, `Đã xóa cấu hình của tài khoản ${targetAccountId}.`);
   };
 
-  if (!isAuthenticated) {
+  if (!credentials) {
     return (
       <div className="min-h-screen bg-[linear-gradient(180deg,#0a192f_0%,#0f2b48_50%,#020d1a_100%)] px-4 py-8 text-white flex items-center justify-center">
         <div className="mx-auto w-full max-w-md rounded-[24px] bg-[#0d2137]/90 p-6 shadow-[0_18px_50px_rgba(0,0,0,0.5)] border border-[#1e4976]">
@@ -113,9 +134,10 @@ export default function AdminPage() {
 
             <button
               type="submit"
-              className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#00AEEE] px-5 text-sm font-bold text-white transition hover:bg-[#0092c8] cursor-pointer"
+              disabled={busy}
+              className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#00AEEE] px-5 text-sm font-bold text-white transition hover:bg-[#0092c8] cursor-pointer disabled:opacity-60"
             >
-              Vào trang quản trị
+              {busy ? 'Đang kiểm tra...' : 'Vào trang quản trị'}
             </button>
           </form>
 
@@ -181,9 +203,10 @@ export default function AdminPage() {
 
                 <button
                   type="submit"
-                  className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#00AEEE] px-5 text-sm font-bold text-white transition hover:bg-[#0092c8] cursor-pointer"
+                  disabled={busy}
+                  className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#00AEEE] px-5 text-sm font-bold text-white transition hover:bg-[#0092c8] cursor-pointer disabled:opacity-60"
                 >
-                  Lưu cấu hình
+                  {busy ? 'Đang lưu...' : 'Lưu cấu hình'}
                 </button>
 
                 {message ? <p className="text-sm text-[#00AEEE]">{message}</p> : null}
@@ -217,6 +240,7 @@ export default function AdminPage() {
                     <button
                       type="button"
                       onClick={() => handleDelete(item.accountId)}
+                      disabled={busy}
                       className="inline-flex h-9 items-center justify-center rounded-xl bg-red-900/40 border border-red-500/50 px-4 text-xs font-semibold text-red-300 transition hover:bg-red-800/60 cursor-pointer"
                     >
                       Xóa

@@ -41,97 +41,103 @@ export function getRandomPrizeK(
   return candidates[Math.floor(Math.random() * candidates.length)];
 }
 
-const STORAGE_KEY = 'xx88-admin-prize-config';
-const ADMIN_USERNAME_KEY = 'xx88-admin-username';
-const ADMIN_PASSWORD_KEY = 'xx88-admin-password';
-const DEFAULT_ADMIN_USERNAME = 'admin';
-const DEFAULT_ADMIN_PASSWORD = 'Admin123!';
+const PRIZE_CONFIG_API = '/api/prize-config';
+
+export type AdminCredentials = {
+  username: string;
+  password: string;
+};
+
+export class AdminAuthError extends Error {}
 
 export function normalizeAccountId(accountId: string): string {
   return accountId.trim().toLowerCase();
 }
 
-export function loadPrizeConfigs(): AccountPrizeConfig[] {
-  if (typeof window === 'undefined') {
+export function sanitizePrizeConfigs(value: unknown): AccountPrizeConfig[] {
+  if (!Array.isArray(value)) {
     return [];
   }
 
-  try {
-    const rawValue = window.localStorage.getItem(STORAGE_KEY);
-    if (!rawValue) {
-      return [];
+  const byAccount = new Map<string, number>();
+  for (const item of value) {
+    if (
+      typeof item !== 'object' ||
+      item === null ||
+      typeof item.accountId !== 'string' ||
+      typeof item.amount !== 'number' ||
+      !Number.isFinite(item.amount)
+    ) {
+      continue;
     }
 
-    const parsedValue = JSON.parse(rawValue) as unknown;
-    if (!Array.isArray(parsedValue)) {
-      return [];
+    const accountId = normalizeAccountId(item.accountId);
+    const amount = Math.floor(item.amount);
+    if (accountId && amount > 0) {
+      byAccount.set(accountId, amount);
     }
-
-    return parsedValue
-      .filter((item): item is AccountPrizeConfig => {
-        return (
-          typeof item === 'object' &&
-          item !== null &&
-          typeof item.accountId === 'string' &&
-          typeof item.amount === 'number' &&
-          Number.isFinite(item.amount)
-        );
-      })
-      .map((item) => ({
-        accountId: normalizeAccountId(item.accountId),
-        amount: Math.floor(item.amount),
-      }));
-  } catch {
-    return [];
-  }
-}
-
-export function savePrizeConfigs(configs: AccountPrizeConfig[]): void {
-  if (typeof window === 'undefined') {
-    return;
   }
 
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(configs));
+  return Array.from(byAccount, ([accountId, amount]) => ({ accountId, amount }));
 }
 
-export function getConfiguredPrize(accountId: string): number | null {
+function adminHeaders(credentials: AdminCredentials): Record<string, string> {
+  return {
+    'x-admin-username': encodeURIComponent(credentials.username),
+    'x-admin-password': encodeURIComponent(credentials.password),
+  };
+}
+
+async function readJson(res: Response): Promise<Record<string, unknown>> {
+  return (await res.json().catch(() => ({}))) as Record<string, unknown>;
+}
+
+export async function fetchConfiguredPrize(accountId: string): Promise<number | null> {
   const normalizedAccountId = normalizeAccountId(accountId);
   if (!normalizedAccountId) {
     return null;
   }
 
-  const matchingConfig = loadPrizeConfigs().find((item) => item.accountId === normalizedAccountId);
-  return matchingConfig?.amount ?? null;
-}
-
-export function loadAdminPassword(): string {
-  if (typeof window === 'undefined') {
-    return DEFAULT_ADMIN_PASSWORD;
+  const res = await fetch(`${PRIZE_CONFIG_API}?account=${encodeURIComponent(normalizedAccountId)}`, {
+    cache: 'no-store',
+  });
+  const data = await readJson(res);
+  if (!res.ok) {
+    throw new Error(String(data.message || 'Không tải được cấu hình thưởng'));
   }
 
-  return window.localStorage.getItem(ADMIN_PASSWORD_KEY) ?? DEFAULT_ADMIN_PASSWORD;
+  return typeof data.amount === 'number' ? data.amount : null;
 }
 
-export function loadAdminUsername(): string {
-  if (typeof window === 'undefined') {
-    return DEFAULT_ADMIN_USERNAME;
+export async function fetchPrizeConfigs(credentials: AdminCredentials): Promise<AccountPrizeConfig[]> {
+  const res = await fetch(PRIZE_CONFIG_API, { cache: 'no-store', headers: adminHeaders(credentials) });
+  const data = await readJson(res);
+  if (res.status === 401) {
+    throw new AdminAuthError(String(data.message || 'Tài khoản hoặc mật khẩu admin không đúng.'));
+  }
+  if (!res.ok) {
+    throw new Error(String(data.message || 'Không tải được cấu hình thưởng'));
   }
 
-  return window.localStorage.getItem(ADMIN_USERNAME_KEY) ?? DEFAULT_ADMIN_USERNAME;
+  return sanitizePrizeConfigs(data.configs);
 }
 
-export function saveAdminUsername(username: string): void {
-  if (typeof window === 'undefined') {
-    return;
+export async function savePrizeConfigs(
+  credentials: AdminCredentials,
+  configs: AccountPrizeConfig[]
+): Promise<AccountPrizeConfig[]> {
+  const res = await fetch(PRIZE_CONFIG_API, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...adminHeaders(credentials) },
+    body: JSON.stringify({ configs }),
+  });
+  const data = await readJson(res);
+  if (res.status === 401) {
+    throw new AdminAuthError(String(data.message || 'Phiên admin không hợp lệ, vui lòng đăng nhập lại.'));
+  }
+  if (!res.ok) {
+    throw new Error(String(data.message || 'Không lưu được cấu hình thưởng'));
   }
 
-  window.localStorage.setItem(ADMIN_USERNAME_KEY, username);
-}
-
-export function saveAdminPassword(password: string): void {
-  if (typeof window === 'undefined') {
-    return;
-  }
-
-  window.localStorage.setItem(ADMIN_PASSWORD_KEY, password);
+  return sanitizePrizeConfigs(data.configs);
 }

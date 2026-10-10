@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Turnstile } from '@marsidev/react-turnstile';
 import Link from 'next/link';
-import { getConfiguredPrize, getRandomPrizeK } from '@/lib/prizeConfig';
+import { fetchConfiguredPrize, getRandomPrizeK } from '@/lib/prizeConfig';
 import PopUpSuggestTet from '../popUp/PopUpSuggestTet';
 import Header from './Header';
 
@@ -105,9 +105,7 @@ export function Body() {
         setPopupOpen(true);
       } else {
         // Logic mock tương tự GG88CODE: kiểm tra admin prize config hoặc random
-        await new Promise((resolve) => setTimeout(resolve, 300));
-
-        const configuredPrize = getConfiguredPrize(trimmedAccount);
+        const configuredPrize = await fetchConfiguredPrize(trimmedAccount);
         const pointsAdded = configuredPrize ?? getRandomPrizeK();
         const successMessage = `Chúc mừng ${trimmedAccount} đã nhận thành công ${pointsAdded.toLocaleString('vi-VN')} điểm!`;
 
