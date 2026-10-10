@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Turnstile } from '@marsidev/react-turnstile';
 import Link from 'next/link';
+import { getConfiguredPrize, getRandomPrizeK } from '@/lib/prizeConfig';
 import PopUpSuggestTet from '../popUp/PopUpSuggestTet';
 import Header from './Header';
 
@@ -45,12 +46,15 @@ export function Body() {
     setCaptchaError('');
     setServerMsg(null);
 
+    const trimmedAccount = account.trim();
+    const trimmedCode = code.trim();
+
     let hasLocalError = false;
-    if (!code.trim()) {
+    if (!trimmedCode) {
       setCodeError('Điền mã code nhận thưởng');
       hasLocalError = true;
     }
-    if (!account.trim()) {
+    if (!trimmedAccount) {
       setAccountError('Nhập tên tài khoản');
       hasLocalError = true;
     }
@@ -66,37 +70,52 @@ export function Body() {
 
     try {
       setLoading(true);
-      const res = await fetch(`${apiUrl}/codes/use-code-public`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({
-          username: account.trim().toLowerCase(),
-          code: code.trim(),
-          captchaToken: captchaToken,
-        }),
-      });
 
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        const apiError = data?.message || data?.error || 'Có lỗi xảy ra';
-        setServerMsg(apiError);
-        setPopupMsg(apiError);
-        setPopupVariant('error');
+      // Nếu có cấu hình apiUrl thì gọi BE, nếu chưa có thì chạy logic nhận điểm giống GG88
+      if (apiUrl) {
+        const res = await fetch(`${apiUrl}/codes/use-code-public`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            username: trimmedAccount.toLowerCase(),
+            code: trimmedCode,
+            captchaToken: captchaToken,
+          }),
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          const apiError = data?.message || data?.error || 'Có lỗi xảy ra';
+          setServerMsg(apiError);
+          setPopupMsg(apiError);
+          setPopupVariant('error');
+          setPopupOpen(true);
+          resetCaptcha('Vui lòng xác minh Captcha lại');
+          return;
+        }
+
+        const points = data?.data?.pointsAdded || 0;
+        const successMessage = `Đã sử dụng code thành công! Đã cộng ${points.toLocaleString('vi-VN')} điểm`;
+        setServerMsg(successMessage);
+        setPopupMsg(successMessage);
+        setPopupVariant('success');
         setPopupOpen(true);
-        resetCaptcha('Vui lòng xác minh Captcha lại');
-        return;
+      } else {
+        // Logic mock tương tự GG88CODE: kiểm tra admin prize config hoặc random
+        await new Promise((resolve) => setTimeout(resolve, 300));
+
+        const configuredPrize = getConfiguredPrize(trimmedAccount);
+        const pointsAdded = configuredPrize ?? getRandomPrizeK();
+        const successMessage = `Chúc mừng ${trimmedAccount} đã nhận thành công ${pointsAdded.toLocaleString('vi-VN')} điểm!`;
+
+        setServerMsg(successMessage);
+        setPopupMsg(successMessage);
+        setPopupVariant('success');
+        setPopupOpen(true);
       }
-
-      const points = data?.data?.pointsAdded || 0;
-      const successMessage = `Đã sử dụng code thành công! Đã cộng ${points} điểm`;
-
-      setServerMsg(successMessage);
-      setPopupMsg(successMessage);
-      setPopupVariant('success');
-      setPopupOpen(true);
     } catch {
       setServerMsg('Không thể kết nối máy chủ');
       setPopupMsg('Không thể kết nối máy chủ');
